@@ -15,7 +15,7 @@
   "host": "github",
   "project_host": "github",
   "detected_by": "dev-sync",
-  "last_sync": "2026-07-06T18:51:38Z",
+  "last_sync": "2026-07-06T19:24:42Z",
   "deployment": {
     "_comment": "Llenado por project-scanner o solution-designer. services = archivos de stack a cargar (vacío = cargar todo).",
     "pattern": "",

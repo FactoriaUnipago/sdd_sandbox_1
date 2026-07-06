@@ -22,6 +22,17 @@ fi
 
 # --- Prerequisites check ---
 echo ""
+echo "╔══════════════════════════════════════════════════════════════════╗"
+echo "║  ⚠️  SCRIPT INTERACTIVO — requiere respuestas del usuario       ║"
+echo "║                                                                  ║"
+echo "║  AI AGENT: Este script tiene prompts con read -p / read -sp.    ║"
+echo "║  DEBES mostrar cada pregunta al usuario y ESPERAR su respuesta. ║"
+echo "║  NO presiones Enter automáticamente. NO uses defaults.          ║"
+echo "║  Presenta las opciones al usuario y deja que elija.             ║"
+echo "║                                                                  ║"
+echo "║  Para saltar prompts: pasa --token, --ide, --role como flags.   ║"
+echo "╚══════════════════════════════════════════════════════════════════╝"
+echo ""
 echo "🔍 Verificando prerequisitos..."
 
 # Python (required)
