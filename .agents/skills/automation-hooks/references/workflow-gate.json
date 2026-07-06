@@ -1,0 +1,32 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "require-requirements-before-design",
+      "trigger": "PostFileCreate",
+      "matcher": "specs/.*/design\\.md$",
+      "action": {
+        "type": "agent",
+        "prompt": "GATE CHECK: Verify that requirements.md exists in this same spec folder. If it does NOT exist, show ERROR: 'requirements.md must be created before design.md. Run the requirements-analyst power first.' Do NOT proceed with design generation."
+      }
+    },
+    {
+      "name": "require-design-before-tasks",
+      "trigger": "PostFileCreate",
+      "matcher": "specs/.*/tasks\\.md$",
+      "action": {
+        "type": "agent",
+        "prompt": "GATE CHECK: Verify that design.md exists in this same spec folder. If it does NOT exist, show ERROR: 'design.md must be created before tasks.md. Run the solution-designer power first.'"
+      }
+    },
+    {
+      "name": "require-test-plan-before-merge",
+      "trigger": "PostFileCreate",
+      "matcher": "\\.github/.*pull.*|pull_request",
+      "action": {
+        "type": "agent",
+        "prompt": "QA GATE: Check that specs/ contains a test-plan.md for this feature. If missing: ERROR 'Test plan required before merge'. If exists, check it contains 'QA Sign-off: APPROVED'. If not signed off: ERROR 'QA sign-off required before merge'."
+      }
+    }
+  ]
+}

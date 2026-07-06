@@ -1,0 +1,13 @@
+.sdd-cache/
+.sdd-credentials.json
+.agents/mcp_config.json
+.sdd-memory/
+.sdd-sync-temp/
+.lazy-mcp-servers.json
+.codebase-memory/
+.playwright-mcp/
+.eslintcache
+.ruff_cache/
+.config.kiro
+.kiro/specs/
+tests/reports/

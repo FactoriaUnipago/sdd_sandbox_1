@@ -1,0 +1,23 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "design-code-sync",
+      "trigger": "PostFileSave",
+      "matcher": "src/.*\\.(ts|tsx|js|jsx|py)$",
+      "action": {
+        "type": "agent",
+        "prompt": "Source code modified. If a design.md exists in specs/ for this feature, verify the design is still accurate. If the implementation diverges from design, add '⚠️ REQUIRES REVIEW' note to design.md."
+      }
+    },
+    {
+      "name": "tasks-progress",
+      "trigger": "PostFileSave",
+      "matcher": "src/.*\\.(ts|tsx|js|jsx|py)$",
+      "action": {
+        "type": "agent",
+        "prompt": "Source code modified. If a tasks.md exists in specs/ for this feature, check if any task should be marked as complete based on the changes made."
+      }
+    }
+  ]
+}
