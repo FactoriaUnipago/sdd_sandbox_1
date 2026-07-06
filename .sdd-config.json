@@ -15,7 +15,7 @@
   "host": "github",
   "project_host": "github",
   "detected_by": "dev-sync",
-  "last_sync": "2026-07-06T19:45:14Z",
+  "last_sync": "2026-07-06T20:23:23Z",
   "deployment": {
     "_comment": "Llenado por project-scanner o solution-designer. services = archivos de stack a cargar (vacío = cargar todo).",
     "pattern": "",
@@ -32,11 +32,10 @@
     "_comment": "Valores compartidos para desarrollo local. Los MCPs leen de aquí.",
     "AZURE_DEVOPS_ORG": "https://dev.azure.com/unipagosa",
     "AZURE_DEVOPS_ORG_NAME": "unipagosa",
-    "AZURE_DEVOPS_PROJECT": "",
+    "AZURE_DEVOPS_PROJECT": "SDD_SANDBOX",
     "DB_HOST": "",
     "DB_PORT": 5432,
     "DB_NAME": ""
   },
-  "docs_language": "es",
-  "AZURE_DEVOPS_PROJECT": "SDD_SANDBOX"
+  "docs_language": "es"
 }
