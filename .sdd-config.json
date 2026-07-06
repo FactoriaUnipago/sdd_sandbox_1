@@ -1,35 +1,32 @@
 {
   "_comment": "Config del proyecto — tracked in git. Generado por sdd-sync.sh, enriquecido por project-scanner/initializer.",
   "version": "1.0.0",
-  "project_name": "",
-  "project_type": "",
+  "project_name": "task-manager",
+  "project_type": "new",
   "spec_prefix": "AB#",
   "stacks": [],
   "ides": [
     "antigravity"
   ],
   "role": "analyst",
-  "repo_type": "",
+  "repo_type": "single",
   "verbosity": "detailed",
   "theme": "",
-  "host": "github",
-  "project_host": "github",
-  "detected_by": "dev-sync",
-  "last_sync": "2026-07-06T20:23:23Z",
+  "host": "azure",
+  "project_host": "azure",
+  "detected_by": "project-initializer",
+  "last_sync": "2026-07-06T16:34:59-04:00",
   "deployment": {
-    "_comment": "Llenado por project-scanner o solution-designer. services = archivos de stack a cargar (vacío = cargar todo).",
     "pattern": "",
     "provider": "",
     "services": []
   },
   "migration": {
-    "_comment": "Solo para project_type=migration. Vacío en new/existing.",
     "from": [],
     "to": [],
     "strategy": ""
   },
   "env": {
-    "_comment": "Valores compartidos para desarrollo local. Los MCPs leen de aquí.",
     "AZURE_DEVOPS_ORG": "https://dev.azure.com/unipagosa",
     "AZURE_DEVOPS_ORG_NAME": "unipagosa",
     "AZURE_DEVOPS_PROJECT": "SDD_SANDBOX",
@@ -37,5 +34,9 @@
     "DB_PORT": 5432,
     "DB_NAME": ""
   },
-  "docs_language": "es"
+  "docs_language": "es",
+  "_generated": {
+    "by": "project-initializer",
+    "date": "2026-07-06"
+  }
 }
