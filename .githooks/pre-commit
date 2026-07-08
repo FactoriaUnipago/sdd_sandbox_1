@@ -1,0 +1,37 @@
+#!/bin/bash
+# SDD Standard Protection — blocks local changes to synced standard files
+# LOCAL files (product.md, design-system-theme.md) are excluded — they are project-specific
+PROTECTED=$(git diff --cached --name-only \
+  | grep -E "\.(kiro|cursor|claude|agents|windsurf|github)/(steering|powers|hooks)/" \
+  | grep -v "product\.md" \
+  | grep -v "design-system-theme\.md" \
+  || true)
+if [ -n "$PROTECTED" ]; then
+  echo ""
+  echo "❌ No puedes modificar archivos del standard SDD:"
+  echo "$PROTECTED"
+  echo ""
+  echo "Estos archivos se actualizan solo via: bash sdd-sync.sh"
+  echo "Si necesitas cambios, hazlos en el repo unipago-sdd-standard."
+  exit 1
+fi
+
+# SDD Validation — validates config, specs, and language
+ERRORS=0
+if [ -f "sdd-scripts/validate-config.py" ] && [ -f ".sdd-config.json" ]; then
+  python3 sdd-scripts/validate-config.py 2>/dev/null || python sdd-scripts/validate-config.py 2>/dev/null
+  [ $? -ne 0 ] && ERRORS=$((ERRORS + 1))
+fi
+if [ -f "sdd-scripts/validate-specs.py" ] && [ -d "specs" ]; then
+  python3 sdd-scripts/validate-specs.py 2>/dev/null || python sdd-scripts/validate-specs.py 2>/dev/null
+  [ $? -ne 0 ] && ERRORS=$((ERRORS + 1))
+fi
+if [ -f "sdd-scripts/validate-language.py" ] && [ -f ".sdd-config.json" ]; then
+  python3 sdd-scripts/validate-language.py 2>/dev/null || python sdd-scripts/validate-language.py 2>/dev/null
+  [ $? -ne 0 ] && ERRORS=$((ERRORS + 1))
+fi
+if [ $ERRORS -gt 0 ]; then
+  echo ""
+  echo "❌ $ERRORS SDD validation(s) failed. Fix before committing."
+  exit 1
+fi

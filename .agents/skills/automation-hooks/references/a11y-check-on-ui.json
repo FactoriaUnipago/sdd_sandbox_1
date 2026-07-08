@@ -1,0 +1,14 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "a11y-check-on-ui",
+      "trigger": "PostFileSave",
+      "matcher": "\\.(tsx|jsx|html|css)$",
+      "action": {
+        "type": "agent",
+        "prompt": "UI file changed. Run axe-core accessibility scan via Playwright MCP. Report any a11y violations as warnings."
+      }
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "name": "sync-specs",
+  "description": "Manual hook for non-technical roles — git add/commit/push specs with confirmation",
+  "triggers": ["manual"],
+  "actions": [
+    {
+      "type": "git-sync",
+      "description": "Stage, commit, and push spec changes with user confirmation",
+      "steps": [
+        "Show changed spec files (requirements.md, test-plan.md, etc.)",
+        "Ask user to confirm commit message",
+        "git add specs/",
+        "git commit -m '[confirmed message]'",
+        "git push origin [current-branch]"
+      ]
+    }
+  ],
+  "roles": ["analyst", "qa"],
+  "notes": "Designed for roles that may not be comfortable with git CLI. Triggered by user request, not automatically."
+}
