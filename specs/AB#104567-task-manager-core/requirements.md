@@ -212,6 +212,14 @@ stateDiagram-v2
 - Tareas compartidas / colaboración
 - Edición de tareas existentes (título/descripción)
 
+## Responsible Parties
+| Role | Name/Email |
+|---|---|
+| Analyst | jsolano@unipago.com.do |
+| Developer | jsolano@unipago.com.do |
+| QA | [TBD] |
+| Business | [TBD] |
+
 ## Approval
 - [x] Analyst: jsolano Date: 2026-07-08
 
