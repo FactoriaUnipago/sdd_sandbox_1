@@ -10,9 +10,9 @@
 
 ## Metadata
 - **Based on:** [design.md](./design.md)
-- **Total estimate:** ~24h (incluye 20% buffer)
+- **Total estimate:** ~28h (incluye 20% buffer)
 - **Number of waves:** 4
-- **Number of tasks:** 11
+- **Number of tasks:** 12
 - **Sprint:** [TBD]
 - **Assignee:** [TBD]
 
@@ -49,7 +49,7 @@ graph TD
 
 ---
 
-## Wave 0: project setup (~4h)
+## Wave 0: project setup (~7h)
 
 ### Task 0.1: Inicialización del proyecto (~2h)
 - **Descripción:** Inicializar monorepo con estructura fullstack: `/client` (React + Vite + TypeScript), `/server` (Express + TypeScript). Configurar linting, tsconfig, scripts de desarrollo.
@@ -61,8 +61,9 @@ graph TD
   - [ ] `.env.example` creado con todas las variables documentadas
   - [ ] `.gitignore` actualizado (node_modules, .env, dist)
   - [ ] `npm run dev` arranca ambos servidores
+  - [ ] Design system aplicado — CSS variables del theme Corporate, Google Fonts (Inter + Plus Jakarta Sans), reset y utilidades base en `client/src/index.css`
 - **Dependencias:** Ninguna
-- **Archivos:** `package.json`, `client/`, `server/`, `tsconfig.json`, `.eslintrc`, `.prettierrc`, `.env.example`, `.gitignore`
+- **Archivos:** `package.json`, `client/`, `server/`, `tsconfig.json`, `.eslintrc`, `.prettierrc`, `.env.example`, `.gitignore`, `client/src/index.css`
 
 ### Task 0.2: Base de datos + seed (~2h)
 - **Descripción:** Docker Compose con PostgreSQL 16 Alpine. Inicializar Prisma ORM, crear seed script con usuario de prueba (bcrypt hash, cost 12).
@@ -75,6 +76,19 @@ graph TD
   - [ ] `npm run db:reset` limpia y re-seedea
 - **Dependencias:** Task 0.1
 - **Archivos:** `docker-compose.yml`, `server/prisma/`, `server/prisma/seed.ts`, `.env`
+
+### Task 0.3: IaC + AWS RDS provisioning (~3h)
+- **Descripción:** Provisionar base de datos PostgreSQL en AWS RDS para entorno remoto (dev/cert/prod). Configurar via CDK o Terraform según preferencia. Incluir security groups, parameter groups y connection string.
+- **Criterios de aceptación:**
+  - [ ] Infraestructura como código para RDS PostgreSQL 16
+  - [ ] Security group permite conexión solo desde Vercel/VPC
+  - [ ] Parameter group con configuración optimizada
+  - [ ] Outputs: endpoint, port, connection string
+  - [ ] Documentación de deploy en `docs/infrastructure/`
+  - [ ] `.env.production.example` con `DATABASE_URL` de RDS
+  - [ ] Script o instrucciones para provisionar/destruir
+- **Dependencias:** Task 0.2
+- **Archivos:** `infra/`, `docs/infrastructure/rds-setup.md`, `.env.production.example`
 
 ---
 
@@ -218,21 +232,22 @@ graph TD
 
 | Orden | Tarea | Descripción | Est. | Depende de |
 |-------|-------|-------------|------|------------|
-| 1 | 0.1 | Inicialización del proyecto | ~2h | — |
-| 2 | 0.2 | Base de datos + seed | ~2h | 0.1 |
-| 3 | 1.1 | Schema Prisma + migraciones | ~2h | 0.2 |
-| 4 | 1.2 | Servidor Express + middlewares | ~2h | 0.1 |
-| 5 | 2.1 | Controlador de autenticación (login) | ~3h | 1.1, 1.2 |
-| 6 | 2.2 | Controlador de tareas (CRUD) | ~3h | 2.1 |
-| 7 | 3.1 | React + UI de autenticación | ~3h | 2.1 |
-| 8 | 3.2 | UI de lista de tareas | ~3h | 2.2, 3.1 |
-| 9 | 4.1 | Tests de integración API | ~2h | 2.1, 2.2 |
-| 10 | 4.2 | Tests E2E | ~1h | 3.2 |
-| 11 | 4.3 | Limpieza + documentación | ~1h | Todas |
+| 1 | 0.1 | Inicialización del proyecto + design system | ~2h | — |
+| 2 | 0.2 | Base de datos local + seed | ~2h | 0.1 |
+| 3 | 0.3 | IaC + AWS RDS provisioning | ~3h | 0.2 |
+| 4 | 1.1 | Schema Prisma + migraciones | ~2h | 0.2 |
+| 5 | 1.2 | Servidor Express + middlewares | ~2h | 0.1 |
+| 6 | 2.1 | Controlador de autenticación (login) | ~3h | 1.1, 1.2 |
+| 7 | 2.2 | Controlador de tareas (CRUD) | ~3h | 2.1 |
+| 8 | 3.1 | React + UI de autenticación | ~3h | 2.1 |
+| 9 | 3.2 | UI de lista de tareas | ~3h | 2.2, 3.1 |
+| 10 | 4.1 | Tests de integración API (QA) | ~2h | 2.1, 2.2 |
+| 11 | 4.2 | Tests E2E (QA) | ~1h | 3.2 |
+| 12 | 4.3 | Limpieza + documentación | ~1h | Todas |
 
-## Total estimate: ~24h (includes 20% buffer)
+## Total estimate: ~28h (includes 20% buffer)
 
-**Estimado base:** 20h · **Buffer (20%):** 4h · **Total:** 24h
+**Estimado base:** 23h · **Buffer (20%):** 5h · **Total:** 28h
 
 ## Completion Checklist
 - [ ] Todas las tareas completadas
