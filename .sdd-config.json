@@ -4,7 +4,7 @@
   "project_name": "task-manager-sdd",
   "project_type": "new",
   "spec_prefix": "AB#",
-  "stacks": [],
+  "stacks": ["node", "express", "react", "postgresql", "prisma"],
   "ides": [
     "antigravity"
   ],
@@ -12,16 +12,18 @@
   "repo_type": "single",
   "verbosity": "detailed",
   "docs_language": "es",
-  "theme": "",
+  "theme": "corporate",
   "host": "github",
   "project_host": "github",
-  "detected_by": "project-initializer",
-  "last_sync": "2026-07-08T02:08:08Z",
+  "detected_by": "solution-designer",
+  "last_sync": "2026-07-08T02:27:00Z",
   "deployment": {
     "_comment": "Filled by project-scanner or solution-designer. services = stack files to load (empty = load all).",
-    "pattern": "",
-    "provider": "",
-    "services": []
+    "pattern": "fullstack-vercel",
+    "provider": "aws",
+    "app": "vercel",
+    "infra": "rds-postgresql",
+    "services": ["rds"]
   },
   "migration": {
     "_comment": "Only for project_type=migration. Empty for new/existing.",
