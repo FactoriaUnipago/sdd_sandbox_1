@@ -81,6 +81,25 @@ graph TB
 | Tracing | AWS X-Ray | Tracing distribuido end-to-end, sampling 10% en prod |
 | Health checks | `/health` endpoint en cada servicio | Checks: DB connection, Redis ping, queue accessibility |
 
+## Cost Estimation
+<!-- Llenado por: solution-designer (step 3d). Usa aws-pricing MCP para datos reales. -->
+<!-- FILL: REQUIRED — no dejar vacío si hay infra cloud -->
+
+### Monthly Estimate
+| Service | Spec | Price/month | Free Tier | Notes |
+|---------|------|-------------|-----------|-------|
+<!-- e.g.: RDS PostgreSQL | db.t3.micro, Single-AZ, 20GB gp3 | $15.44 | 750 hrs/month × 12mo | First year free -->
+<!-- e.g.: Vercel | Hobby plan | $0 | Always free | Personal projects -->
+<!-- e.g.: S3 | 5GB standard | $0.12 | 5GB free | Static assets -->
+
+| | **Total (sin free tier)** | **$XX.XX/mes** | | |
+| | **Total (con free tier)** | **$X.XX/mes** | | |
+
+> ⚠️ Free tier limits and expiration dates. Review annually.
+
+### Cost Scaling
+<!-- Cómo cambian los costos al escalar: usuarios, storage, requests -->
+
 ## Key Decisions
 <!-- Enlaza a ADRs si existen: docs/architecture/adr/ -->
 

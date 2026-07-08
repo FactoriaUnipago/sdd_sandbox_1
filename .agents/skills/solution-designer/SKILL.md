@@ -95,8 +95,14 @@ Only after ALL checks pass (or are documented as unavailable) → proceed.
       - If Python + Graphviz available → generate script based on `references/infra-diagram-template.py`
         - Detect cloud from stacks[]: aws → diagrams.aws.*, azure → diagrams.azure.*
         - Output: `docs/diagrams/infrastructure.py` + execute → `docs/diagrams/infrastructure.png`
+        - ⚠️ MUST use GRAPH_ATTR + CLUSTER_* styling constants from the template. Do NOT use plain defaults.
       - If NOT available → Mermaid fallback + inform: "Graphviz not installed — simplified global diagram"
     - `migration` → TWO global diagrams: `infrastructure-legacy.py` + `infrastructure-target.py`
+3d. ☐ **Cost estimation** → If deployment includes cloud infra:
+    - Use `aws-pricing` MCP to get real pricing for selected services
+    - Fill `## Cost Estimation` in `docs/architecture/system-design.md` (see template)
+    - Include: service spec, monthly cost, free tier notes, total with/without free tier
+    - ⚠️ Do NOT skip — this section is REQUIRED in the system-design template
 3c. ☐ **Present supporting sections** → BEFORE requesting design approval, proactively present:
    - **Technical Assumptions**: chosen patterns, frameworks, justification for X over Y, stubs or mocks assumed
    - **Limitations/Constraints**: scalability limits, known tradeoffs, performance ceilings, tech debt accepted
@@ -442,6 +448,7 @@ If `docs/architecture/` missing → create from `docs/architecture/_templates/*-
 - ☐ Called `context7` to verify library/framework docs, latest stable versions, and compatibility (step 2c)
 - ☐ Used `sequential-thinking` for complex architecture tradeoffs (monolith vs micro, SQL vs NoSQL) (step 2c)
 - ☐ Called `codebase-memory` to understand existing code structure and patterns (step 3, if `existing` project)
+- ☐ Called `aws-pricing` to estimate infrastructure costs and filled `## Cost Estimation` in system-design.md (step 3d)
 - ☐ Updated `azure-devops` with MD/SVC/ED and Task WIs after approvals (steps 8, 15)
 - ☐ Saved design decisions and stack choices to `server-memory` (step 17)
 - ☐ If any MCP unavailable → documented as `[NOT VERIFIED]` in output

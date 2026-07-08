@@ -15,7 +15,7 @@
 - **Backend**: Node.js 20 + Express 5 — API REST minimalista, mismo lenguaje que frontend (TypeScript), rápido para MVP
 - **Database**: PostgreSQL 16 — relacional, modelo User→Task con FK, robusto, free tier en RDS
 - **ORM**: Prisma — type-safe, migraciones automáticas, integración nativa con PostgreSQL
-- **Auth**: JWT (jsonwebtoken) + bcrypt — stateless, hash seguro, sin dependencias externas
+- **Auth**: JWT (jsonwebtoken) + bcrypt + API Key gate — stateless, hash seguro, gate global con `x-api-key` header
 - **Cloud Services**: AWS RDS (PostgreSQL), Vercel (hosting app)
 - **Theme**: `corporate` — herramienta de productividad/gestión interna
 
@@ -160,7 +160,8 @@ sequenceDiagram
   ```json
   { "token": "jwt_string", "user": { "id": "uuid", "username": "string" } }
   ```
-- **Auth**: No requerida
+- **Auth**: API key requerida, JWT no requerido
+- **Headers**: `x-api-key: {API_KEY}`
 - **Errors**: `401 Credenciales inválidas`
 - **Maps to**: REQ-005
 - **curl**:

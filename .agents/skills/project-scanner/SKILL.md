@@ -307,8 +307,9 @@ Assessment output format: See `references/health-check-example.md`.
 - **Mix of 🔄 and 🔀**: Present both. Let user decide scope.
 
 ### 7. Constraints
-- **Read-only**: This power ONLY reads files, never modifies project code
-- **Only generates `product.md` and `.sdd-config.json`**: Does not touch any other file
+- **Only generates documentation**: Does not touch project source code
+- **Existing projects**: generates `product.md`, `.sdd-config.json`, `docs/architecture/*.md`
+- **Migration projects**: generates `product.md`, `.sdd-config.json`, `migration-plan.md` (NO arch docs — those belong in design phase)
 - **Single confirmation**: Shows complete proposal, asks once: "Adjust anything or should I proceed?"
 - **Does not infer what it cannot confirm**: Marks it as `[VERIFY]`
 - **Health check is informational**: Alerts are suggestions, not automatic actions
@@ -325,7 +326,15 @@ Assessment output format: See `references/health-check-example.md`.
 - `tech.md` — approved tech stack for detection matching
 
 ## Output
+
+### Existing projects
 - `./product.md` — auto-generated project profile
-- `.sdd-config.json` — stack configuration for dev-sync
+- `.sdd-config.json` — stack configuration
+- `docs/architecture/*.md` — global architecture docs from code analysis (CP6)
 - Health check alerts (shown in conversation, not saved to file)
-- `docs/architecture/*.md` — auto-generated global architecture docs from code analysis
+
+### Migration projects
+- `./product.md` — legacy + target architecture profile
+- `.sdd-config.json` — stack configuration with migration fields
+- `migration-plan.md` — phases, estimation, strategy (CP7m)
+- Health check alerts (shown in conversation, not saved to file)

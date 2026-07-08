@@ -4,7 +4,13 @@
   "project_name": "task-manager-sdd",
   "project_type": "new",
   "spec_prefix": "AB#",
-  "stacks": ["node", "express", "react", "postgresql", "prisma"],
+  "stacks": [
+    "node",
+    "express",
+    "react",
+    "postgresql",
+    "prisma"
+  ],
   "ides": [
     "antigravity"
   ],
@@ -16,14 +22,16 @@
   "host": "github",
   "project_host": "github",
   "detected_by": "solution-designer",
-  "last_sync": "2026-07-08T02:27:00Z",
+  "last_sync": "2026-07-08T03:05:40Z",
   "deployment": {
     "_comment": "Filled by project-scanner or solution-designer. services = stack files to load (empty = load all).",
     "pattern": "fullstack-vercel",
     "provider": "aws",
     "app": "vercel",
     "infra": "rds-postgresql",
-    "services": ["rds"]
+    "services": [
+      "rds"
+    ]
   },
   "migration": {
     "_comment": "Only for project_type=migration. Empty for new/existing.",

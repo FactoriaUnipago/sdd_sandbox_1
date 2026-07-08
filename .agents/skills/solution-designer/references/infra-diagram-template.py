@@ -2,7 +2,105 @@
 # pip install diagrams
 # Requires: Graphviz installed (https://graphviz.org/download/)
 
-# EXAMPLE 1: AWS Full Stack
+# ─────────────────────────────────────────────────────────
+# STYLING STANDARD — Use these for ALL infrastructure diagrams
+# ─────────────────────────────────────────────────────────
+
+GRAPH_ATTR = {
+    "bgcolor": "#ffffff",
+    "pad": "1.2",
+    "fontsize": "18",
+    "fontname": "Helvetica Neue",
+    "fontcolor": "#1a1a2e",
+    "splines": "curved",
+    "nodesep": "1.0",
+    "ranksep": "1.0",
+    "dpi": "150",
+}
+
+# Cluster styles — pick by provider/purpose
+CLUSTER_VERCEL = {
+    "bgcolor": "#f0f7ff",
+    "style": "rounded",
+    "pencolor": "#0070f3",
+    "penwidth": "2.5",
+    "fontname": "Helvetica Neue Bold",
+    "fontsize": "15",
+    "fontcolor": "#0050b3",
+}
+
+CLUSTER_AWS = {
+    "bgcolor": "#fff8f0",
+    "style": "rounded",
+    "pencolor": "#ff9900",
+    "penwidth": "2.5",
+    "fontname": "Helvetica Neue Bold",
+    "fontsize": "15",
+    "fontcolor": "#cc7a00",
+}
+
+CLUSTER_AZURE = {
+    "bgcolor": "#f0f4ff",
+    "style": "rounded",
+    "pencolor": "#0078d4",
+    "penwidth": "2.5",
+    "fontname": "Helvetica Neue Bold",
+    "fontsize": "15",
+    "fontcolor": "#005a9e",
+}
+
+CLUSTER_SECURITY = {
+    "bgcolor": "#fffbf0",
+    "style": "rounded",
+    "pencolor": "#d4a017",
+    "penwidth": "2",
+    "fontname": "Helvetica Neue Bold",
+    "fontsize": "13",
+    "fontcolor": "#8a6d00",
+}
+
+CLUSTER_INNER = {
+    "bgcolor": "#ffffff",
+    "style": "rounded",
+    "pencolor": "#d0d7de",
+    "penwidth": "1.5",
+    "fontname": "Helvetica Neue",
+    "fontsize": "12",
+    "fontcolor": "#57606a",
+}
+
+CLUSTER_LOCAL = {
+    "bgcolor": "#f0fff4",
+    "style": "rounded",
+    "pencolor": "#2da44e",
+    "penwidth": "2.5",
+    "fontname": "Helvetica Neue Bold",
+    "fontsize": "15",
+    "fontcolor": "#1a7f37",
+}
+
+CLUSTER_ONPREM = {
+    "bgcolor": "#f5f5f5",
+    "style": "rounded",
+    "pencolor": "#666666",
+    "penwidth": "2.5",
+    "fontname": "Helvetica Neue Bold",
+    "fontsize": "15",
+    "fontcolor": "#333333",
+}
+
+# Edge styles by purpose
+# Primary flow:    Edge(color="#0070f3", style="bold", label="HTTPS")
+# Auth/security:   Edge(color="#d4a017", style="bold", label="✓ JWT")
+# Database:        Edge(color="#7c3aed", style="bold", label="Prisma ORM\nTCP :5432")
+# Internal/async:  Edge(style="dashed", color="#999999", label="metrics")
+# API calls:       Edge(color="#666666", label="fetch /api/*")
+# Dev env:         Edge(color="#2da44e", style="bold", label="localhost:3000")
+
+
+# ─────────────────────────────────────────────────────────
+# EXAMPLE 1: AWS Full Stack (Serverless)
+# ─────────────────────────────────────────────────────────
 from diagrams import Diagram, Cluster, Edge
 from diagrams.aws.network import CloudFront, APIGateway, Route53
 from diagrams.aws.compute import Lambda
@@ -13,108 +111,108 @@ from diagrams.aws.storage import S3
 from diagrams.aws.management import Cloudwatch
 
 with Diagram(
-    "AB#100 — Card Payments Infrastructure",
-    filename="docs/diagrams/infrastructure",  # outputs .png
-    show=False,                                # don't auto-open
-    direction="TB",                            # top to bottom
-    graph_attr={"bgcolor": "white", "pad": "0.5"},
+    "",
+    filename="docs/diagrams/infrastructure",
+    show=False,
+    direction="LR",
+    graph_attr=GRAPH_ATTR,
 ):
     dns = Route53("payments.example.com")
 
-    with Cluster("AWS — us-east-1"):
+    with Cluster("AWS — us-east-1", graph_attr=CLUSTER_AWS):
         cdn = CloudFront("CDN")
 
-        with Cluster("Frontend"):
+        with Cluster("Frontend", graph_attr=CLUSTER_INNER):
             spa = S3("React SPA\nstatic assets")
 
-        with Cluster("API Layer"):
+        with Cluster("API Layer", graph_attr=CLUSTER_INNER):
             apigw = APIGateway("REST API\n/api/v1/*")
             authorizer = Lambda("Authorizer\nJWT validation")
 
-        with Cluster("Business Logic"):
+        with Cluster("Business Logic", graph_attr=CLUSTER_INNER):
             fn_payments = Lambda("Payments\nCRUD + Stripe")
             fn_notifications = Lambda("Notifications\nemail + push")
             fn_reports = Lambda("Reports\naggregations")
 
-        with Cluster("Data"):
+        with Cluster("Data", graph_attr=CLUSTER_INNER):
             db = RDS("PostgreSQL 16\ndb.t3.medium")
             secrets = SecretsManager("API Keys\nStripe, SES")
 
-        with Cluster("Async"):
+        with Cluster("Async", graph_attr=CLUSTER_INNER):
             queue = SQS("payment-queue")
             topic = SNS("notifications-topic")
 
-        with Cluster("Auth"):
+        with Cluster("Auth", graph_attr=CLUSTER_SECURITY):
             cognito = Cognito("User Pool\nJWT issuer")
 
         monitoring = Cloudwatch("Alarms\nLatency, Errors")
 
-    # Edges
-    dns >> cdn
-    cdn >> spa
-    cdn >> apigw
-    apigw >> authorizer >> cognito
-    apigw >> fn_payments
-    apigw >> fn_reports
-    fn_payments >> db
-    fn_payments >> secrets
-    fn_payments >> Edge(label="async") >> queue
+    # Edges with styled connections
+    dns >> Edge(color="#0070f3", style="bold", label="HTTPS") >> cdn
+    cdn >> Edge(color="#0070f3") >> spa
+    cdn >> Edge(color="#0070f3") >> apigw
+    apigw >> Edge(color="#d4a017", style="bold", label="✓ JWT") >> authorizer >> cognito
+    apigw >> Edge(color="#666666") >> fn_payments
+    apigw >> Edge(color="#666666") >> fn_reports
+    fn_payments >> Edge(color="#7c3aed", style="bold", label="TCP :5432") >> db
+    fn_payments >> Edge(color="#666666") >> secrets
+    fn_payments >> Edge(style="dashed", color="#999999", label="async") >> queue
     queue >> fn_notifications
     fn_notifications >> topic
-    fn_reports >> db
-    fn_payments >> monitoring
+    fn_reports >> Edge(color="#7c3aed", style="bold") >> db
+    fn_payments >> Edge(style="dashed", color="#999999", label="metrics") >> monitoring
 
 
 # ─────────────────────────────────────────────────────────
-# EXAMPLE 2: Azure Full Stack (uncomment to use)
+# EXAMPLE 2: Vercel + AWS Hybrid (Full Stack App)
 # ─────────────────────────────────────────────────────────
-# from diagrams.azure.network import FrontDoor, ApplicationGateway
-# from diagrams.azure.compute import FunctionApps
-# from diagrams.azure.database import DatabaseForPostgresqlServers
-# from diagrams.azure.integration import ServiceBus
-# from diagrams.azure.identity import ActiveDirectory
-# from diagrams.azure.storage import BlobStorage
+# from diagrams.onprem.client import Users
+# from diagrams.programming.framework import React
+# from diagrams.programming.language import NodeJS
+# from diagrams.aws.database import RDS
+# from diagrams.aws.security import IAM
+# from diagrams.aws.management import Cloudwatch
+# from diagrams.onprem.security import Vault
+# from diagrams.generic.network import Firewall
+# from diagrams.saas.cdn import Cloudflare
 #
-# with Diagram("Infrastructure — Azure", filename="docs/diagrams/infrastructure", show=False):
-#     with Cluster("Azure — East US"):
-#         fd = FrontDoor("Front Door")
-#         blob = BlobStorage("React SPA")
-#         apigw = ApplicationGateway("API Gateway")
-#         fn = FunctionApps("Functions")
-#         db = DatabaseForPostgresqlServers("PostgreSQL")
-#         bus = ServiceBus("Service Bus")
-#         ad = ActiveDirectory("Azure AD")
+# with Diagram("", filename="docs/diagrams/infrastructure", show=False,
+#              direction="LR", graph_attr=GRAPH_ATTR):
+#     users = Users("Users")
 #
-#     fd >> blob
-#     fd >> apigw >> fn >> db
-#     fn >> bus
+#     with Cluster("Vercel Platform", graph_attr=CLUSTER_VERCEL):
+#         with Cluster("Edge Network", graph_attr=CLUSTER_INNER):
+#             edge = Cloudflare("CDN + SSL")
+#         with Cluster("Frontend", graph_attr=CLUSTER_INNER):
+#             react = React("React SPA")
+#         with Cluster("Security", graph_attr=CLUSTER_SECURITY):
+#             apikey = Firewall("API Key Gate")
+#             jwt = Vault("JWT Middleware")
+#         with Cluster("API", graph_attr=CLUSTER_INNER):
+#             api = NodeJS("Express API\n/api/*")
+#
+#     with Cluster("AWS — us-east-1", graph_attr=CLUSTER_AWS):
+#         with Cluster("VPC — Private Subnet", graph_attr=CLUSTER_INNER):
+#             db = RDS("PostgreSQL 16\ndb.t3.micro")
+#         iam = IAM("IAM Credentials")
+#         cw = Cloudwatch("CloudWatch\nMetrics")
+#
+#     users >> Edge(color="#0070f3", style="bold", label="HTTPS") >> edge
+#     edge >> react
+#     react >> Edge(color="#666666", label="fetch /api/*") >> apikey
+#     apikey >> Edge(color="#d4a017", style="bold", label="✓ valid key") >> jwt
+#     jwt >> Edge(color="#d4a017", style="bold", label="✓ userId") >> api
+#     api >> Edge(color="#7c3aed", style="bold", label="Prisma ORM\nTCP :5432") >> db
+#     iam >> Edge(style="dashed", color="#999999", label="rotate\ncredentials") >> db
+#     db >> Edge(style="dashed", color="#999999", label="metrics") >> cw
 
 
 # ─────────────────────────────────────────────────────────
-# EXAMPLE 3: Hybrid (Vercel + AWS + Supabase)
-# ─────────────────────────────────────────────────────────
-# from diagrams.aws.compute import Lambda
-# from diagrams.aws.integration import SQS
-# from diagrams.custom import Custom
-#
-# with Diagram("Infrastructure — Hybrid", filename="docs/diagrams/infrastructure", show=False):
-#     vercel = Custom("Vercel\nNext.js", "./icons/vercel.png")
-#     supabase = Custom("Supabase\nPostgreSQL + Auth", "./icons/supabase.png")
-#
-#     with Cluster("AWS"):
-#         worker = Lambda("Worker")
-#         queue = SQS("Queue")
-#
-#     vercel >> supabase
-#     vercel >> queue >> worker
-
-
-# ─────────────────────────────────────────────────────────
-# EXAMPLE 4: Migration (legacy vs target)
+# EXAMPLE 3: Migration (legacy vs target)
 # ─────────────────────────────────────────────────────────
 # Generate TWO diagrams for migration projects:
-#   filename="docs/diagrams/infrastructure-legacy"
-#   filename="docs/diagrams/infrastructure-target"
+#   filename="docs/diagrams/infrastructure-legacy"   (use CLUSTER_ONPREM)
+#   filename="docs/diagrams/infrastructure-target"    (use CLUSTER_AWS/CLUSTER_VERCEL)
 
 
 # ─────────────────────────────────────────────────────────
@@ -122,41 +220,30 @@ with Diagram(
 # ─────────────────────────────────────────────────────────
 # 1. ALWAYS set show=False (don't auto-open in browser)
 # 2. ALWAYS set filename="docs/diagrams/infrastructure" (standard path)
-# 3. ALWAYS use Cluster() to group related services (VPC, subnets, layers)
-# 4. ALWAYS add brief labels to nodes (service name + purpose)
-# 5. ALWAYS use Edge(label="...") for non-obvious connections
-# 6. For migration: generate TWO scripts (infrastructure-legacy + infrastructure-target)
-# 7. If Python/Graphviz not available → generate Mermaid equivalent in design.md §Infrastructure.
-#    Use subgraph clusters (NOT linear flowcharts). Match the same structure as the Python diagram.
-#    Example Mermaid fallback for Hybrid (Vercel + AWS):
-#
-#    ```mermaid
-#    graph TB
-#        subgraph "Vercel"
-#            APP["Next.js App<br/>SSR + API Routes"]
-#        end
-#        subgraph "AWS — us-east-1"
-#            subgraph "Data"
-#                RDS["PostgreSQL 15<br/>db.t3.micro"]
-#            end
-#            subgraph "Async"
-#                SQS["SQS Queue"]
-#                WORKER["Lambda Worker"]
-#            end
-#        end
-#        APP -->|"Prisma ORM"| RDS
-#        APP -->|"async jobs"| SQS --> WORKER
-#    ```
-#
-#    Rules for Mermaid fallback:
-#    - Use `subgraph` for every Cluster() in the Python version
-#    - Add `<br/>` for multi-line labels (name + purpose)
-#    - Use labeled edges for non-obvious connections
-#    - Do NOT use plain A --> B --> C flowcharts — show architecture, not request flow
-# 8. Detect cloud provider from stacks[] in .sdd-config.json:
-#    - "aws" → use diagrams.aws.*
-#    - "azure" → use diagrams.azure.*
-#    - "gcp" → use diagrams.gcp.*
-#    - mixed → use diagrams.custom.Custom for unsupported services
-# 9. Include monitoring/observability nodes (CloudWatch, Datadog, etc.)
-# 10. Include security nodes (auth, secrets management)
+# 3. ALWAYS use GRAPH_ATTR for the Diagram constructor
+# 4. ALWAYS use CLUSTER_* constants for Cluster() graph_attr — pick by provider:
+#    - AWS services → CLUSTER_AWS
+#    - Vercel/frontend → CLUSTER_VERCEL
+#    - Azure services → CLUSTER_AZURE
+#    - Auth/security layers → CLUSTER_SECURITY
+#    - Sub-groupings → CLUSTER_INNER
+#    - Dev environment → CLUSTER_LOCAL
+#    - On-premise/legacy → CLUSTER_ONPREM
+# 5. ALWAYS use Edge() with color and label for non-obvious connections:
+#    - Primary flow: color="#0070f3", style="bold"
+#    - Auth/security: color="#d4a017", style="bold"
+#    - Database: color="#7c3aed", style="bold"
+#    - Internal/async: style="dashed", color="#999999"
+#    - API calls: color="#666666"
+# 6. ALWAYS use direction="LR" (left-to-right). Use "TB" only if >10 nodes vertical.
+# 7. ALWAYS add brief labels to nodes (service name + purpose, use \n for multiline)
+# 8. For migration: generate TWO scripts (infrastructure-legacy + infrastructure-target)
+# 9. If Python/Graphviz not available → generate Mermaid equivalent in design.md §Infrastructure.
+#    Use subgraph clusters (NOT linear flowcharts). Match the same structure.
+# 10. Detect cloud provider from stacks[] in .sdd-config.json:
+#     - "aws" → use diagrams.aws.*
+#     - "azure" → use diagrams.azure.*
+#     - mixed → use diagrams.custom.Custom for unsupported services
+# 11. Include monitoring/observability nodes (CloudWatch, Datadog, etc.)
+# 12. Include security nodes (auth, secrets management)
+# 13. Custom icons go in docs/diagrams/icons/ (use Custom() node)
