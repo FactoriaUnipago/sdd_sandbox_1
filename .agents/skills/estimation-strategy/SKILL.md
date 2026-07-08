@@ -251,6 +251,39 @@ Present as 3×3 matrix (3 scenarios × manual / AI new / AI mature):
 | Pessimistic | X sprints | X sprints | X sprints |
 ```
 
+### Migration Factor
+
+> In a migration, analysis is NOT discovery — it's documentation of what already exists.
+
+Unlike greenfield projects, migrations have existing source code, documentation, test cases, and user flows as reference. This reduces effort across ALL roles. Apply the Migration Factor AFTER calculating base effort.
+
+**Available reference sources** (check which apply):
+- Source code (XHTML, JSP, forms, managed beans, controllers)
+- Existing requirements/specs (ADO work items, Jira, wiki)
+- Existing test cases (manual or automated)
+- WSDL/API contracts (for integration mapping)
+- User documentation, FAQs, training materials
+
+#### Migration Factor by Role and Complexity
+
+| Role | Task | Factor | Justification |
+|---|---|---|---|
+| **Analyst** | Requirements (screens) | ×0.2 | AI generates specs from source code + existing reqs, analyst validates |
+| **Analyst** | Overhead (UAT, docs) | ×0.7 | UAT faster with existing acceptance criteria |
+| **Developer** | 🟢 Simple screens | ×0.4 | AI auto-generates from source, dev verifies |
+| **Developer** | 🟡 Medium screens | ×0.55 | AI generates structure + logic, dev adjusts |
+| **Developer** | 🔴 Complex screens | ×0.75 | Complex logic, but source documents behavior |
+| **Developer** | Overhead (setup, BFF, CI/CD) | ×0.85 | Scaffolded from existing contracts + docs |
+| **QA** | Test cases (screens) | ×0.3 | Migrate existing test cases, adapt format + verify parity |
+| **QA** | Overhead (regression, UAT) | ×0.65 | Baseline data + existing test plans available |
+
+**Expected total reduction**: ×0.5 – ×0.6 (40-50% less effort than greenfield equivalent)
+
+> ⚠️ The Migration Factor assumes existing documentation is reasonably complete. Validate this assumption in the pilot sprint (Sprint 1-2). If documentation is sparse, recalibrate toward base values.
+
+> ⚠️ The Migration Factor stacks WITH AI multipliers. Formula:
+> `Effective = Base × Migration_Factor × AI_Multiplier × Architecture_Multiplier`
+
 ## Sprint Capacity
 
 ```

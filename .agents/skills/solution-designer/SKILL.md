@@ -230,11 +230,13 @@ Only after ALL checks pass (or are documented as unavailable) → proceed.
      - ⚠️ NOT "transparent". Differences: no ENUM, no complex CHECK constraints, no arrays, different date types, no JSONB.
      - ⚠️ Migrations generated for SQLite will NOT work in PostgreSQL production. Will need to be regenerated.
      - ⚠️ Mark in tasks.md: "DB: SQLite (temporary) — migrate to PostgreSQL before CERT".
-   - ⚠️ **IaC + Pipeline question** (only if greenfield): Ask the user:
-     - "Shall I set up infrastructure as code (CDK/Terraform) from now, or leave it for later?"
-     - "Shall I set up the CI/CD pipeline from now?"
+   - ⚠️ **IaC + Pipeline question** (only if greenfield): Check `.sdd-config.json`:
+     - If `deployment.infra` is set (e.g., `rds-postgresql`) → Task 0.3 (IaC) is **MANDATORY** — remote DB needs provisioning. Do NOT ask, include it.
+     - If `deployment.infra` is empty → ask: "Shall I set up infrastructure as code (CDK/Terraform) from now, or leave it for later?"
+     - Pipeline: "Shall I set up the CI/CD pipeline from now?"
      If YES → include as Task 0.3 / 0.4 in Wave 0. If NO → move to last wave or omit.
    - `migration` → include migration-specific tasks: data migration, feature flags, rollback steps
+   - ⚠️ **Test task role ownership**: Unit tests = inside each developer impl task. Integration/E2E tests = QA role. Do NOT create integration/E2E tasks assigned to developer.
    - tasks.md MUST include the same traceability header as design.md
    - Each task MUST use this format:
      ```markdown
@@ -267,7 +269,14 @@ Only after ALL checks pass (or are documented as unavailable) → proceed.
    ⚠️ Follow exact template from azure-devops-workflow.md §Description Format — Task.
    - **Custom fields**: For each Task WI → run field discovery (work-item-setup §2b) before `wit_create_work_item`.
    - **State**: use state discovery (§2b.4) → set to first `InProgress` state. ⚠️ NEVER leave as "New".
-16. ☐ **Commit + push tasks** → `git add + commit + push`. ⚠️ Push is MANDATORY.
+   - **Assignment**: ⚠️ ALWAYS assign tasks. Developer tasks → current user. QA tasks → QA team member if known from `server-memory`, else leave unassigned and note in chat. NEVER create unassigned developer tasks.
+   - **Parent WI update**: After creating all Task WIs, update the Requirement WI Description to include ALL spec links:
+     ```
+     📄 requirements.md → {repo_url}/blob/{branch}/specs/{prefix}{ID}-{name}/requirements.md
+     📄 design.md → {repo_url}/blob/{branch}/specs/{prefix}{ID}-{name}/design.md
+     📄 tasks.md → {repo_url}/blob/{branch}/specs/{prefix}{ID}-{name}/tasks.md
+     ```
+16. ☐ **Commit + push tasks** → `git add + commit + push`. ⚠️ Push is MANDATORY. Do NOT present 📍 without push confirmation.
 17. ☐ **Save to memory** → Use `server-memory` to persist design decisions, stack choices, and deployment patterns.
 18. ☐ **COMPLETION CHECKPOINT** → Before showing 📍, verify ALL of the following are done:
     - [ ] MD/SVC/ED WIs created in ADO (step 8) — WI IDs exist

@@ -65,9 +65,12 @@
 
 ## Feature Parity Matrix
 <!-- ALWAYS. List actual features from codebase scan, not generic placeholders. -->
-| # | Feature | Current | Target | Complexity | Status |
-|---|---------|---------|--------|:-----------:|--------|
-<!-- Generate from actual codebase analysis. Each row = real feature. -->
+<!-- Integrations = count of service calls / external APIs that the feature depends on. Affects estimation. -->
+| # | Feature | Current | Target | Integrations | Complexity | Status |
+|---|---------|---------|--------|:------------:|:-----------:|--------|
+<!-- e.g.: 1 | Consulta Entidades | JSF + PrimeFaces | React + Express | 3 servicios | 🟡 | Pending -->
+<!-- e.g.: 2 | Registro Persona | JSF form | React form | 0 (static) | 🟢 | Pending -->
+<!-- Integrations: 0 = static/local data only. N = N service endpoints required. -->
 
 ## Data Migration
 <!-- CONDITIONAL: Include if DB is involved. Omit with justification if not. -->
@@ -152,12 +155,35 @@ graph LR
 ## Estimation Matrix
 <!-- ALWAYS. Present manual AND AI scenarios. See estimation-strategy.md for multipliers and verification tax. -->
 
-### Scenario A — Manual Development (no agentic IDEs)
+### Summary Total
+<!-- High-level view for stakeholders. Sprints = 2 weeks. -->
 | Scenario | Sprints | Months | Condition |
 |---|:-:|:-:|---|
 | Optimistic | | | [project-specific best case] |
 | **Realistic (+25%)** | | | [project-specific standard case] |
 | Pessimistic (+50%) | | | [project-specific worst case] |
+
+### Estimation by Module and Role
+<!-- ALWAYS. Break down EVERY module by the 3 roles. QA effort MUST be explicit — never hidden in sprint overhead. -->
+<!-- Hours = productive hours (not calendar). Use estimation-strategy.md multipliers. -->
+
+| Module | Analyst | Developer | QA | Module Total |
+|--------|--------:|----------:|---:|-----------:|
+<!-- e.g.: Auth & Users | 8h | 40h | 16h | 64h -->
+<!-- e.g.: API Migration | 4h | 32h | 12h | 48h -->
+<!-- e.g.: Data Migration | 4h | 24h | 8h | 36h -->
+<!-- e.g.: UI Components | 8h | 48h | 20h | 76h -->
+<!-- e.g.: Infra & Deploy | 2h | 16h | 8h | 26h -->
+| **Role Total** | **Xh** | **Xh** | **Xh** | **Xh** |
+
+> ⚠️ QA column includes: test plan creation, test case design, manual testing, regression, and UAT coordination. Do NOT omit.
+
+#### Role effort guidelines
+| Role | Includes | Typical % of total |
+|------|----------|:-:|
+| **Analyst** | Requirements review, acceptance criteria, UAT coordination, documentation | 10-15% |
+| **Developer** | Implementation, unit tests, code review, verification of AI output | 55-65% |
+| **QA** | Test plan, test cases, manual/automated testing, regression, UAT | 20-30% |
 
 ### Scenario B — Agentic IDEs + SDD Standard
 <!-- See estimation-strategy.md for multipliers per task type. Include verification tax (15-25%). -->

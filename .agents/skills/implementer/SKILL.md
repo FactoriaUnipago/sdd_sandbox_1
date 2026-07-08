@@ -24,7 +24,7 @@ Only after ALL checks pass (or are documented as unavailable) → proceed.
    - `existing` → read existing code FIRST. Follow existing patterns, naming, conventions. Do NOT restructure. → Use `codebase-memory` to analyze existing code patterns and conventions
    - `migration` → implement with backward compatibility. Use feature flags. Include rollback plan.
 4. ☐ **Read progress** → Check server-memory for completed tasks
-5. ☐ **Propose next task** → Show approach, wait for OK. → ADO: update child Task → **Active**
+5. ☐ **Propose next task** → Present a numbered plan listing: what will be done, files to create/modify, dependencies to install, and design system/theme to apply (if `.sdd-config.json` has `theme`). STOP and wait for explicit user approval. Do NOT start coding until user says OK.
 6. ☐ **Implement** → Code the task. → ADO: update child Task → **In Progress**. If this is the first Task started, also update MD/SVC/ED children → **Active**. → Use `sequential-thinking` for complex implementation problems. → Use `context7` to verify library/framework API usage.
 7. ☐ **Run lint + tests** → Must pass before proceeding. → Use `eslint` for JS/TS linting. → If `python-analyzer` available: lint Python files. → If `playwright` available: run E2E tests for UI components.
 8. ☐ **Commit per task** → `git add + commit + push` after EACH completed task. ⚠️ Push is MANDATORY — commit without push = incomplete.

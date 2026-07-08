@@ -90,8 +90,16 @@ def main():
     }
 
     VALID_STACKS = [
+        # Top-level stacks (match steering dirs)
         'angular', 'aws', 'capacitor', 'dotnet', 'flutter',
         'java', 'node', 'python', 'react', 'typescript',
+        # Sub-stacks detected by scanner (steered under parent dirs)
+        'express', 'nestjs', 'fastapi', 'django',
+        'postgresql', 'mysql', 'sqlite', 'mongodb', 'dynamodb',
+        'prisma', 'typeorm', 'sequelize', 'sqlalchemy',
+        'nextjs', 'vite', 'nuxt',
+        'tailwind', 'mui', 'primereact', 'primeng',
+        'docker', 'kubernetes',
     ]
 
     VALID_DEPLOYMENT_PATTERNS = [

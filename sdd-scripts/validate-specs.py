@@ -44,6 +44,10 @@ def get_h2_headings(filepath):
                 heading = line[3:].strip().lower()
                 # Remove template placeholders like [xxx]
                 heading = re.sub(r'\[.*?\]', '', heading).strip()
+                # Remove time estimates like (~2h), (~24h), (~h)
+                heading = re.sub(r'\(~\d*h\)', '', heading).strip()
+                # Remove trailing parenthetical content like (anything)
+                heading = re.sub(r'\(.*?\)\s*$', '', heading).strip()
                 if heading:
                     headings.add(heading)
     return headings

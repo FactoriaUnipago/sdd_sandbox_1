@@ -74,6 +74,7 @@ graph TD
   <!-- e.g.: Core dependencies installed (framework, ORM, test runner) -->
   <!-- e.g.: Linter/formatter configured -->
   <!-- e.g.: .env.example created with required vars documented -->
+  <!-- e.g.: Design system applied — CSS variables from theme, Google Fonts, reset (if frontend project with theme in .sdd-config.json) -->
 - **Dependencies:** None
 - **Files to create/modify:** [list actual files]
 
@@ -259,6 +260,13 @@ graph TD
 ## Wave 4: Testing & Polish (~[hours]h)
 <!-- ALWAYS. Integration tests, E2E tests, polish — depends on previous waves. -->
 <!-- Generate tasks from actual test strategy. The tasks below are EXAMPLES. -->
+
+> ⚠️ **Role ownership:**
+> - **Unit tests** → Developer (included inside each implementation task, NOT separate)
+> - **Integration tests, E2E tests** → QA (create as QA tasks, or defer to test-plan.md)
+> - **Cleanup, documentation** → Developer
+>
+> Do NOT create integration/E2E test tasks assigned to Developer. If the project has no QA role assigned yet, mark these tasks as `Role: QA · Status: Blocked (awaiting QA assignment)`.
 
 ### Task 4.1: [task name from design] (~[hours]h)
 <!-- e.g.: Integration tests -->
