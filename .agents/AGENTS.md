@@ -8,7 +8,7 @@ On your FIRST interaction, execute ALL steps in `rules/precheck.md` IN ORDER bef
 Do NOT skip any step. Do NOT read .sdd-config.json before precheck. Do NOT jump to lifecycle gates.
 The precheck rules are in `rules/` — do NOT search for them in skills/.
 
-## Role: analyst
+## Role: developer
 
 ## ⛔ THE 7 RULES (violating any = failure)
 

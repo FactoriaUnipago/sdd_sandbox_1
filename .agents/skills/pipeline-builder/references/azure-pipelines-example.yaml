@@ -1,0 +1,159 @@
+# azure-pipelines.yml
+trigger:
+  branches:
+    include:
+      - dev
+      - release/*
+      - main
+
+pr:
+  branches:
+    include:
+      - dev
+      - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  - group: project-vars-$(Build.SourceBranchName)
+  - name: NODE_VERSION
+    value: '20.x'
+
+stages:
+  # ── Build ──────────────────────────────────────────
+  - stage: Build
+    displayName: '🔨 Build'
+    jobs:
+      - job: BuildJob
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: $(NODE_VERSION)
+          - script: npm ci
+            displayName: 'Install dependencies'
+          - script: npm run build
+            displayName: 'Build project'
+          - publish: $(System.DefaultWorkingDirectory)/dist
+            artifact: build-output
+
+  # ── Lint ───────────────────────────────────────────
+  - stage: Lint
+    displayName: '📏 Lint'
+    dependsOn: Build
+    jobs:
+      - job: LintJob
+        steps:
+          - script: npm ci
+          - script: npm run lint
+            displayName: 'Run ESLint'
+          - script: npm run format:check
+            displayName: 'Check Prettier formatting'
+
+  # ── Unit Tests ─────────────────────────────────────
+  - stage: Test
+    displayName: '🧪 Unit Tests'
+    dependsOn: Build
+    jobs:
+      - job: TestJob
+        steps:
+          - script: npm ci
+          - script: npm run test -- --coverage --ci
+            displayName: 'Run tests with coverage'
+          - task: PublishTestResults@2
+            inputs:
+              testResultsFormat: 'JUnit'
+              testResultsFiles: '**/junit.xml'
+          - task: PublishCodeCoverageResults@1
+            inputs:
+              codeCoverageTool: 'Cobertura'
+              summaryFileLocation: '**/coverage/cobertura-coverage.xml'
+
+  # ── Security Scan ──────────────────────────────────
+  - stage: SecurityScan
+    displayName: '🔒 Security Scan'
+    dependsOn: Build
+    jobs:
+      - job: SecurityJob
+        steps:
+          - script: npm ci
+          - script: npm audit --audit-level=high
+            displayName: 'NPM Audit'
+          - script: npx snyk test --severity-threshold=high
+            displayName: 'Snyk Security Scan'
+
+  # ── Deploy DEV (auto) ─────────────────────────────
+  - stage: DeployDev
+    displayName: '🚀 Deploy DEV'
+    dependsOn: [Lint, Test, SecurityScan]
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
+    jobs:
+      - deployment: DeployDevJob
+        environment: 'dev'
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - download: current
+                  artifact: build-output
+                - script: npx cdk deploy --require-approval never
+                  displayName: 'CDK Deploy to DEV'
+
+  # ── Deploy CERT (manual + approval) ───────────────
+  - stage: DeployCert
+    displayName: '🚀 Deploy CERT'
+    dependsOn: [Lint, Test, SecurityScan]
+    condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/release/'))
+    jobs:
+      - deployment: DeployCertJob
+        environment: 'cert'   # Has manual approval gate configured in Azure DevOps
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - download: current
+                  artifact: build-output
+                - script: npx cdk deploy --require-approval never
+                  displayName: 'CDK Deploy to CERT'
+
+  # ── Deploy PROD (manual + triple approval) ────────
+  - stage: DeployProd
+    displayName: '🚀 Deploy PROD'
+    dependsOn: [Lint, Test, SecurityScan]
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    jobs:
+      - deployment: DeployProdJob
+        environment: 'prod'   # Has Dev+QA+BA approval gate configured in Azure DevOps
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - download: current
+                  artifact: build-output
+                - script: npx cdk deploy --require-approval never
+                  displayName: 'CDK Deploy to PROD'
+
+  # ── Smoke Test ─────────────────────────────────────
+  - stage: SmokeTest
+    displayName: '🔍 Smoke Test'
+    dependsOn: [DeployDev, DeployCert, DeployProd]
+    condition: succeededOrFailed()
+    jobs:
+      - job: SmokeTestJob
+        steps:
+          - script: |
+              curl -f $(API_URL)/health || exit 1
+            displayName: 'Health check'
+
+  # ── Rollback ───────────────────────────────────────
+  - stage: Rollback
+    displayName: '⏪ Rollback'
+    dependsOn: SmokeTest
+    condition: failed()
+    jobs:
+      - job: RollbackJob
+        steps:
+          - script: |
+              echo "Smoke test failed. Rolling back..."
+              npx cdk deploy --require-approval never --previous-version
+            displayName: 'Rollback deployment'

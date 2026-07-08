@@ -1,0 +1,169 @@
+# .github/workflows/ci-cd.yml
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [dev, main]
+  pull_request:
+    branches: [dev, main]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target environment'
+        required: true
+        type: choice
+        options: [cert, prod]
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  # ── Build ──────────────────────────────────────────
+  build:
+    name: '🔨 Build'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: build-output
+          path: dist/
+
+  # ── Lint ───────────────────────────────────────────
+  lint:
+    name: '📏 Lint'
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run format:check
+
+  # ── Unit Tests ─────────────────────────────────────
+  test:
+    name: '🧪 Unit Tests'
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run test -- --coverage --ci
+      - uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/
+
+  # ── Security Scan ──────────────────────────────────
+  security-scan:
+    name: '🔒 Security Scan'
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm ci
+      - run: npm audit --audit-level=high
+      - uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+  # ── Deploy DEV (auto on push to dev) ───────────────
+  deploy-dev:
+    name: '🚀 Deploy DEV'
+    needs: [lint, test, security-scan]
+    if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    environment: dev
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: build-output
+          path: dist/
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_DEV }}
+          aws-region: us-east-1
+      - run: npx cdk deploy --require-approval never
+
+  # ── Deploy CERT (manual, Dev+QA approval) ──────────
+  deploy-cert:
+    name: '🚀 Deploy CERT'
+    needs: [lint, test, security-scan]
+    if: github.event.inputs.environment == 'cert'
+    runs-on: ubuntu-latest
+    environment: cert   # Requires Dev+QA reviewers configured in GitHub
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: build-output
+          path: dist/
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_CERT }}
+          aws-region: us-east-1
+      - run: npx cdk deploy --require-approval never
+
+  # ── Deploy PROD (manual, Dev+QA+BA approval) ───────
+  deploy-prod:
+    name: '🚀 Deploy PROD'
+    needs: [lint, test, security-scan]
+    if: github.event.inputs.environment == 'prod'
+    runs-on: ubuntu-latest
+    environment: prod   # Requires Dev+QA+BA reviewers configured in GitHub
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: build-output
+          path: dist/
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_PROD }}
+          aws-region: us-east-1
+      - run: npx cdk deploy --require-approval never
+
+  # ── Smoke Test ─────────────────────────────────────
+  smoke-test:
+    name: '🔍 Smoke Test'
+    needs: [deploy-dev, deploy-cert, deploy-prod]
+    if: always() && (needs.deploy-dev.result == 'success' || needs.deploy-cert.result == 'success' || needs.deploy-prod.result == 'success')
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          curl -f ${{ vars.API_URL }}/health || exit 1
+          echo "✅ Smoke test passed"
+
+  # ── Rollback ───────────────────────────────────────
+  rollback:
+    name: '⏪ Rollback'
+    needs: smoke-test
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.before }}  # Previous commit
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE }}
+          aws-region: us-east-1
+      - run: |
+          echo "⏪ Rolling back to previous version..."
+          npx cdk deploy --require-approval never
