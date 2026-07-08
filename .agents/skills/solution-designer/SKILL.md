@@ -99,10 +99,14 @@ Only after ALL checks pass (or are documented as unavailable) → proceed.
       - If NOT available → Mermaid fallback + inform: "Graphviz not installed — simplified global diagram"
     - `migration` → TWO global diagrams: `infrastructure-legacy.py` + `infrastructure-target.py`
 3d. ☐ **Cost estimation** → If deployment includes cloud infra:
-    - Use `aws-pricing` MCP to get real pricing for selected services
     - Fill `## Cost Estimation` in `docs/architecture/system-design.md` (see template)
+    - **Pricing source chain** (in order):
+      1. AWS services → `aws-pricing` MCP (GetProducts — real per-region data)
+      2. AWS free tier / limits → `aws-docs` MCP (complement pricing with limits)
+      3. Non-AWS services (Vercel, Supabase, etc.) → web search for current pricing pages
     - Include: service spec, monthly cost, free tier notes, total with/without free tier
-    - ⚠️ Do NOT skip — this section is REQUIRED in the system-design template
+    - ⚠️ Do NOT use `context7` for pricing — it only has framework/library docs
+    - ⚠️ Do NOT invent prices from training data — use MCP or web search
 3c. ☐ **Present supporting sections** → BEFORE requesting design approval, proactively present:
    - **Technical Assumptions**: chosen patterns, frameworks, justification for X over Y, stubs or mocks assumed
    - **Limitations/Constraints**: scalability limits, known tradeoffs, performance ceilings, tech debt accepted

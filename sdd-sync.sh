@@ -129,6 +129,9 @@ print('|'.join(config.get('ides', [])))
   fi
 fi
 
+# Apply role default EARLY — needed before --refresh path which exits early
+[ -z "$ROLE" ] && ROLE="all"
+
 # Restore proxy preference from cache if not explicitly set
 if [ "$FORCE" = true ] && [ "$USE_MCP_PROXY" = false ]; then
   # --force without --mcp-proxy = disable proxy, clean up
