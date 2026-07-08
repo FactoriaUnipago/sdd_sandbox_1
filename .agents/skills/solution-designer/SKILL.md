@@ -80,12 +80,12 @@ Only after ALL checks pass (or are documented as unavailable) → proceed.
    - `## Technology Decisions` — chosen stack with rationale
    - `## Data Model` (§3.1-§3.2) — schemas + DB tables
    - `## API Contracts` (§3.3) — endpoints with request/response
-   - `## UI Prompts` (§3.4) — if applicable
+   - `## UI Screens` (§3.4) — if applicable
    - `## Infrastructure` (§3.5) — diagrams
    - `## Approval` — approval checkboxes
    ⚠️ Do NOT improvise NEW sections. Use template as structure reference — omit sections that don't apply, expand sections that need more depth.
 
-   → If `stitch` available: generate UI components from §3.4 UI Prompts.
+   → If `stitch` available: generate UI components from §3.4 UI Screens + `mockups/prompts.md`.
 3a. ☐ **Post-generation compliance check** → After generating design.md, verify ALL section headers from `specs/_templates/design-template.md` exist in output. If ANY is missing → add it NOW before presenting to user.
    ⚠️ **Content is contextual, not copied.** Template items (checklists, table rows, examples) are ILLUSTRATIVE. Generate content from actual project analysis — codebase scan, architecture review, stakeholder context. If a generated section looks identical to the template placeholder, you're doing it wrong.
    ⚠️ **Cross-document coherence**: After saving, check if related docs exist (product.md ↔ migration-plan.md ↔ requirements.md ↔ design.md). Verify shared data (counts, architecture decisions, tech stack) is consistent. If discrepancies → fix or flag `⚠️ REQUIRES REVIEW`.
@@ -332,14 +332,26 @@ Only after ALL checks pass (or are documented as unavailable) → proceed.
 
 2.7. **Design System Theme Selection** — **Skip if project is backend-only / API-only (no frontend).**
 
-| Project Type | Recommended Theme |
-|---|---|
-| Payments/Banking/Finance | `fintech` |
-| Health/Clinical/Medical | `healthcare` |
-| ERP/CRM/Internal tools | `corporate` |
-| Insurance/Policies/Claims | `insurtech` |
+Present theme options to the user. Recommend based on project domain:
 
-Available: `fintech`|`healthcare`|`corporate`|`insurtech`|`custom`. Propose in design.md only — do NOT write to config yet. Persisted in step 6 (after approval). `custom` → custom theme file needed.
+| Project Domain | Recommended | Why |
+|---|---|---|
+| Payments/Banking/Finance | `fintech` | Dark mode, high contrast, data-dense |
+| Health/Clinical/Medical | `healthcare` | Clean, accessible, calming tones |
+| ERP/CRM/Internal tools | `corporate` | Professional, light, data-dense |
+| Insurance/Policies/Claims | `insurtech` | Trust-focused, clean, corporate-lite |
+| Government/Public sector | `govtech` | Accessible, institutional, WCAG AA+ |
+| Institutional/Education | `institutional` | Formal, structured, neutral palette |
+
+⚠️ **MUST ask the user** — do NOT assume. Present as:
+> "Para el diseño visual recomiendo el theme **{recommended}** por {reason}. Los themes disponibles son: `fintech`, `healthcare`, `corporate`, `insurtech`, `govtech`, `institutional`. ¿Alguno de estos, o prefieres un theme custom con tus colores de marca?"
+
+If user chooses `custom`:
+1. Ask for: primary color, accent color, mode (light/dark), font preference, style (minimal/bold/playful)
+2. Generate `THEME_CUSTOM.md` from `core/themes/THEME_CUSTOM.md` template, filling in the user's values
+3. Set `theme: "custom"` in design.md
+
+Persisted in step 6 (after approval). Do NOT write to config yet.
 
 2b. **Stack selection** (only if `stacks[]` empty): Read `tech.md`, recommend from approved list as table (Layer|Recommended|Alternative|Justification). Flag unapproved libs ⚠️. Approval → update config → `sdd-sync.sh`.
 
@@ -360,7 +372,7 @@ NEVER generate API contracts or UI prompts without reading the corresponding ref
 | 3.1 Architecture | Mermaid: component, sequence, deps. Frontend: tree, routing, state. **Skip frontend tree for backend-only. Skip backend deps for frontend-only.** |
 | 3.2 DB Schema | Tables, columns, types, indexes, FKs. **Skip for frontend-only (no DB).** |
 | 3.3 API Contracts | Read ref template first. Per endpoint: method, route, auth, TS interfaces, errors, curl. Group by resource. Field→DB mapping. **Frontend-only: document consumed APIs only (base URL, auth, endpoints used), not defined endpoints.** |
-| 3.4 UI Prompts | Read theme + ref template + design-system-base. Per page: route, auth, visual prompt (hex/px/fonts/shadows). Copy-pasteable to Stitch/v0/Bolt. **Skip for backend-only.** |
+| 3.4 UI Screens | Screen index table: route, auth level, key components, task reference. **Full UI prompts** → generate to `specs/{prefix}{ID}-{name}/mockups/prompts.md` (read theme + ref template + design-system-base). design.md only has the summary table. **Skip for backend-only.** |
 | 3.5 Infra | Mermaid (always) + Python `diagrams` (if available): read ref template → `docs/diagrams/infrastructure.py` → PNG. Detect provider from stacks. Migration → 2 scripts. Existing → READ+ADD. Deps: `pip install diagrams` + Graphviz; offer install or Mermaid-only. |
 
 #### 3a. Incremental review mode — design.md
@@ -373,7 +385,7 @@ After proposing the design structure (sections list), ask:
   - §3.1 Data schemas
   - §3.2 DB tables (one table at a time)
   - §3.3 API endpoints (one endpoint group at a time)
-  - §3.4 UI prompts
+  - §3.4 UI screens → also generate `mockups/prompts.md`
   - §3.5 Infra
 - **All at once** → generate the full design.md in a single pass
 

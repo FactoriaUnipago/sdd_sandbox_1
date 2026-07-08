@@ -65,6 +65,20 @@ For each task:
    Proceed?
    ```
 
+4a. **UI Mockup** — If the task involves frontend/UI (screens, pages, components):
+   - Read the UI prompt from `mockups/prompts.md` for this task's screens
+   - **Always generate HTML mockup** (editable source):
+     - Save to: `specs/{prefix}{ID}-{name}/mockups/{task}-{screen}.html`
+     - Apply theme CSS variables from `core/themes/THEME_{name}.md`
+     - Self-contained: inline styles, no external dependencies
+   - **If image MCP available** (`generate_image`, `stitch`, or any image generation tool):
+     - Also generate PNG snapshot from the UI prompt + active theme
+     - Save to: `specs/{prefix}{ID}-{name}/mockups/{task}-{screen}.png`
+   - **If NO image MCP available**:
+     - HTML-only is sufficient. Inform: "No image MCP — HTML mockup created. Open in browser to preview."
+   - Show mockup to user for approval before coding
+   - ⚠️ ALL mockup artifacts MUST be committed to repo (HTML + PNG + prompts.md = project artifacts, not ephemeral)
+
 5. **Implement** — Create/modify files following. → Use `sequential-thinking` for complex implementation problems (multi-step algorithms, state management, concurrency):
    - Design specs from design.md (component details, tech choices)
    - Patterns from existing codebase (read with codebase-memory)

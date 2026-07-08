@@ -13,7 +13,7 @@ CSS custom properties. STRUCTURE here; VALUES from active theme.
 2. Read `core/themes/THEME_[NAME].md`
 3. Use colors, typography, style from theme
 
-Themes: `fintech` · `healthcare` · `corporate` · `insurtech` · `custom`
+Themes: `fintech` · `healthcare` · `corporate` · `insurtech` · `govtech` · `institutional` · `custom`
 
 NEVER use hardcoded colors without consulting the theme.
 

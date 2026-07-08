@@ -16,6 +16,52 @@ NEVER write "see theme file" or "refer to design system" in a prompt. The prompt
 
 ---
 
+## System Layout & Shared Components
+
+Before generating per-page prompts, define the **app shell** and **reusable components** that are shared across pages. These are generated ONCE in `prompts.md` and referenced by page prompts.
+
+### App Shell (System Layout)
+
+Define the persistent layout that wraps all authenticated pages:
+
+```
+APP SHELL — [App Name]
+
+STRUCTURE:
+- Sidebar (left): [width], [bg], [border-right]
+  - Logo area: [height], [alignment]
+  - Nav items: [icon + label], [active state], [hover state]
+  - Collapse toggle: [position], [collapsed width], [icon-only mode]
+  - User/profile: [bottom], [avatar + name + role]
+- Toolbar (top): [height], [bg], [items: breadcrumb, search, notifications, user menu]
+- Content area: [padding], [max-width], [scroll behavior]
+
+RESPONSIVE:
+- Desktop (≥1024px): sidebar expanded + toolbar + content
+- Tablet (768-1023px): sidebar collapsed (icon-only) + toolbar + content
+- Mobile (<768px): sidebar hidden, hamburger menu in toolbar, content full-width
+
+[Include exact colors, sizes, transitions from theme]
+```
+
+### Shared Components
+
+Define once, reference by name in page prompts:
+
+| Component | Define once | Pages that use it |
+|-----------|-------------|-------------------|
+| `AppShell` | Sidebar + Toolbar + Content area | All authenticated pages |
+| `Navbar` | Top bar (logo, nav links, user menu) | Public pages (landing, login, register) |
+| `DataTable` | Sortable headers, pagination, row actions, empty state, loading skeleton | List/search pages |
+| `FilterBar` | Search input + filter dropdowns + active filter pills | List pages with filters |
+| `FormLayout` | Card container + field stack + action buttons + validation | All form pages |
+| `Modal` | Overlay + card + close button + action footer | Confirmation dialogs, detail views |
+| `Toast` | Position, colors per type (success/error/warning), auto-dismiss | Global |
+
+⚠️ **Rule**: If a component appears in 2+ pages, define it in Shared Components. Page prompts then say `Uses: AppShell, DataTable, FilterBar` instead of repeating the full definition.
+
+⚠️ **Self-contained exception**: The Visual Prompt for each page MUST still include all values inline for standalone use in Stitch/v0/Bolt. But shared components avoid re-specifying behavior/interactions that are identical across pages.
+
 ## Example: Page /payments/new — Payment Form
 
 ### Metadata
@@ -474,3 +520,6 @@ MOBILE (< 768px):
 12. For dashboard/admin pages: include data table layout, filters, pagination
 13. For forms: include validation rules per field, error messages, success flow
 14. ALWAYS respect `prefers-reduced-motion` — note which animations to disable
+15. ALWAYS define the App Shell (system layout) FIRST in prompts.md — before any page prompts
+16. If a component (sidebar, navbar, data table, modal, toast) appears in 2+ pages → define it once in Shared Components, reference by name in page prompts
+17. Page prompts include `Uses: AppShell, DataTable, FilterBar` to reference shared components instead of re-specifying
