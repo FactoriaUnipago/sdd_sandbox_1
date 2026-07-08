@@ -1,6 +1,6 @@
 """
 Validates that spec files follow their template structure.
-Checks that no invented sections exist beyond what the template defines.
+Checks that all required sections from the template exist in the spec.
 
 Usage: python scripts/validate-specs.py [--specs-dir PATH]
 """
@@ -104,15 +104,15 @@ def main():
             if not template_headings:
                 continue
 
-            # Find headings in spec that are NOT in template
-            extra = spec_headings - template_headings
-            # Filter out common acceptable additions
-            acceptable = {'status', 'changelog', 'notas', 'notes', 'approval', 'aprobación'}
-            extra = extra - acceptable
+            # Find headings in template that are MISSING from spec
+            # Optional sections that templates may have but specs can skip
+            optional = {'status', 'changelog', 'notas', 'notes', 'key decisions'}
+            required = template_headings - optional
+            missing = required - spec_headings
 
-            if extra:
+            if missing:
                 rel_path = os.path.relpath(spec_path, root)
-                errors.append(f"  {rel_path}: sections not in template: {sorted(extra)}")
+                errors.append(f"  {rel_path}: missing required sections: {sorted(missing)}")
 
             checked += 1
 
@@ -139,16 +139,17 @@ def main():
                 template_headings = get_h2_headings(template_path)
                 if not template_headings:
                     continue
-                extra = spec_headings - template_headings
-                acceptable = {'status', 'changelog', 'notas', 'notes', 'approval', 'aprobación'}
-                extra = extra - acceptable
-                if extra:
+                # Optional sections that templates may have but docs can skip
+                optional = {'status', 'changelog', 'notas', 'notes', 'key decisions'}
+                required = template_headings - optional
+                missing = required - spec_headings
+                if missing:
                     rel_path = os.path.relpath(spec_path, root)
-                    errors.append(f"  {rel_path}: sections not in template: {sorted(extra)}")
+                    errors.append(f"  {rel_path}: missing required sections: {sorted(missing)}")
                 checked += 1
 
     if errors:
-        print(f"❌ Specs with invented sections ({len(errors)} files):")
+        print(f"❌ Specs with missing required sections ({len(errors)} files):")
         for e in errors:
             print(e)
         sys.exit(1)

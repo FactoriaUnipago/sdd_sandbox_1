@@ -446,6 +446,7 @@ If `docs/architecture/` missing → create from `docs/architecture/_templates/*-
 - `security.md` — security requirements
 - `design-system-base.md` — UI design tokens
 - `estimation-strategy.md` — estimation multipliers and architecture variant impact
+- `data-modeling.md` — normalization rules (1NF-3NF), validation checklist, denormalization criteria
 
 ### ⚠️ MCP Self-Verification (verify BEFORE presenting design.md and tasks.md to user)
 
