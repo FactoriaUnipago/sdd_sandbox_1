@@ -56,14 +56,14 @@ graph TD
 ### Task 0.1: Inicialización del proyecto (~2h)
 - **Descripción:** Inicializar monorepo con estructura fullstack: `app/client` (React + Vite + TypeScript), `app/server` (Express + TypeScript). Todo el código del proyecto dentro de `app/` (repo root = solo artefactos SDD).
 - **Criterios de aceptación:**
-  - [ ] `app/package.json` raíz con scripts para client/server
-  - [ ] `app/client/` inicializado con Vite + React 18 + TypeScript
-  - [ ] `app/server/` inicializado con Express 5 + TypeScript + ts-node
-  - [ ] ESLint + Prettier configurados en `app/`
-  - [ ] `app/.env.example` creado con todas las variables documentadas
-  - [ ] `app/.gitignore` actualizado (node_modules, .env, dist)
-  - [ ] `npm run dev` (desde `app/`) arranca ambos servidores
-  - [ ] Design system aplicado — TailwindCSS 4 configurado con variables del theme Corporate, Google Fonts (Inter + Plus Jakarta Sans) cargadas en `app/client/src/index.css` e `index.html`
+  - [x] `app/package.json` raíz con scripts para client/server
+  - [x] `app/client/` inicializado con Vite + React 18 + TypeScript
+  - [x] `app/server/` inicializado con Express 5 + TypeScript + ts-node
+  - [x] ESLint + Prettier configurados en `app/`
+  - [x] `app/.env.example` creado con todas las variables documentadas
+  - [x] `app/.gitignore` actualizado (node_modules, .env, dist)
+  - [x] `npm run dev` (desde `app/`) arranca ambos servidores
+  - [x] Design system aplicado — TailwindCSS 4 configurado con variables del theme Corporate, Google Fonts (Inter + Plus Jakarta Sans) cargadas en `app/client/src/index.css` e `index.html`
 - **Dependencias:** Ninguna
 - **Archivos:** `app/package.json`, `app/client/`, `app/server/`, `app/tsconfig.json`, `app/.eslintrc`, `app/.prettierrc`, `app/.env.example`, `app/.gitignore`, `app/client/src/index.css`, `app/client/vite.config.ts`
 
