@@ -82,6 +82,11 @@ graph TD
   <!-- - API endpoints (health, docs) if backend exists -->
   <!-- This page confirms the theme is correctly wired. It gets replaced when actual UI pages are built. -->
   <!-- Use CSS classes from index.css, NOT inline styles. -->
+  <!-- FRONTEND ONLY: i18n configured from day 1: -->
+  <!-- - Install i18n lib (react-i18next for React, @ngx-translate for Angular, vue-i18n for Vue) -->
+  <!-- - Create locales/{lang}/translation.json with default language from docs_language in .sdd-config.json -->
+  <!-- - All UI labels use t('key'), NEVER hardcoded strings in JSX/templates -->
+  <!-- - Smoke test page also uses i18n keys -->
 - **Dependencies:** None
 - **Files to create/modify:** [list actual files]
 

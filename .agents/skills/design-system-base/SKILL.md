@@ -209,3 +209,9 @@ Required meta tag: `<meta name="viewport" content="width=device-width, initial-s
 5. **Component CSS files** — each component has its own `.css` file using design system tokens. No utility-class soup unless using Tailwind (only if user requested).
 
 6. **Base styles in index.css** — reset, theme variables, global typography, shared component classes (`.card`, `.btn`, `.input`, etc.) all live in the entry CSS file.
+
+7. **i18n from day 1** — ALL UI labels go through internationalization. NEVER hardcode strings in JSX/templates.
+   - Default locale: `docs_language` from `.sdd-config.json` (e.g., `"es"` → `locales/es/translation.json`)
+   - Libraries: `react-i18next` (React), `@ngx-translate/core` (Angular), `vue-i18n` (Vue)
+   - Usage: `t('login.title')`, not `"Iniciar Sesión"`
+   - Flutter: use `flutter_localizations` + `intl` package

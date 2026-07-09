@@ -27,11 +27,13 @@ description: project folder structure by project type, repo type, multi-IDE supp
 
 ## Repo Type (`repo_type`)
 
-| Type | Structure |
-|------|-----------|
-| `single` | `app/` (new) or root (existing) |
-| `monorepo` | `packages/` or `apps/` |
-| `multirepo` | Independent SDD per repo |
+| Type | Structure | Example |
+|------|-----------|---------|
+| `single` | One project in `app/` — includes fullstack (`app/server/` + `app/client/`) | Task Manager with Express + React |
+| `monorepo` | Multiple **independent** apps/packages: `packages/` or `apps/` with workspace manager (pnpm, turborepo, nx) | Platform with `packages/api/`, `packages/web/`, `packages/mobile/`, `packages/shared/` |
+| `multirepo` | Independent SDD per repo | Separate repos for API and frontend |
+
+> ⚠️ A fullstack app with `server/` + `client/` inside `app/` is **`single`**, NOT `monorepo`. Monorepo means multiple independently deployable packages managed by a workspace tool.
 
 ---
 
