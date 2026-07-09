@@ -70,12 +70,12 @@ graph TD
 ### Task 0.2: Base de datos + seed (~2h)
 - **Descripción:** Docker Compose con PostgreSQL 16 Alpine. Inicializar Prisma ORM, crear seed script con usuario de prueba (bcrypt hash, cost 12).
 - **Criterios de aceptación:**
-  - [ ] `app/docker-compose.yml` con postgres:16-alpine en port 5432
-  - [ ] Prisma inicializado (`prisma init`) en `app/server/`
-  - [ ] `app/.env` con `DATABASE_URL` apuntando a Docker
-  - [ ] Seed script crea usuario `admin` con password hasheado (bcrypt cost 12)
-  - [ ] `npm run db:seed` ejecuta el seed
-  - [ ] `npm run db:reset` limpia y re-seedea
+  - [x] `app/docker-compose.yml` con postgres:16-alpine en port 5432
+  - [x] Prisma inicializado (`prisma init`) en `app/server/`
+  - [x] `app/.env` con `DATABASE_URL` apuntando a Docker
+  - [x] Seed script crea usuario `admin` con password hasheado (bcrypt cost 12)
+  - [x] `npm run db:seed` ejecuta el seed
+  - [x] `npm run db:reset` limpia y re-seedea
 - **Dependencias:** Task 0.1
 - **Archivos:** `app/docker-compose.yml`, `app/server/prisma/`, `app/server/prisma/seed.ts`, `app/.env`
 
