@@ -32,7 +32,7 @@ app.use(cors({ origin: CORS_ORIGIN }));
 app.use(express.json({ limit: '10kb' }));
 
 // API Documentation routes
-const openApiSpecPath = path.join(__dirname, '../../../../docs/api/openapi.yaml');
+const openApiSpecPath = path.join(__dirname, '../../../docs/api/openapi.yaml');
 
 app.get('/api/docs/spec', (req: Request, res: Response) => {
   try {
