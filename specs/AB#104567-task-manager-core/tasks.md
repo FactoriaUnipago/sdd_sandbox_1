@@ -86,11 +86,11 @@ graph TD
   - [ ] Security group permite conexión solo desde Vercel/VPC
   - [ ] Parameter group con configuración optimizada
   - [ ] Outputs: endpoint, port, connection string
-  - [ ] Documentación de deploy en `docs/infrastructure/`
+  - [ ] Documentación de deploy en `docs/architecture/system-design.md`
   - [ ] `.env.production.example` con `DATABASE_URL` de RDS
   - [ ] Script o instrucciones para provisionar/destruir
 - **Dependencias:** Task 0.2
-- **Archivos:** `infra/`, `docs/infrastructure/rds-setup.md`, `.env.production.example`
+- **Archivos:** `app/infra/`, `docs/architecture/system-design.md`, `app/.env.production.example`
 
 ---
 
