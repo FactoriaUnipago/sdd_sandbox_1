@@ -1,0 +1,196 @@
+openapi: 3.0.3
+info:
+  title: Task Manager API
+  description: API for managing user tasks with JWT authentication and API Key gate.
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000/api
+    description: Local development server
+paths:
+  /auth/login:
+    post:
+      summary: User Login
+      description: Authenticates user and returns JWT token
+      parameters:
+        - name: x-api-key
+          in: header
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+              properties:
+                username:
+                  type: string
+                  minLength: 3
+                  maxLength: 50
+                password:
+                  type: string
+                  minLength: 6
+                  maxLength: 100
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                      username:
+                        type: string
+        '401':
+          description: Invalid credentials
+  /tasks:
+    get:
+      summary: List User Tasks
+      description: Returns tasks belonging to the authenticated user ordered by creation date DESC.
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: List of tasks
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tasks:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                        title:
+                          type: string
+                        description:
+                          type: string
+                          nullable: true
+                        completed:
+                          type: boolean
+                        createdAt:
+                          type: string
+                          format: date-time
+        '401':
+          description: Unauthorized
+    post:
+      summary: Create Task
+      description: Creates a new task for the authenticated user.
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - title
+              properties:
+                title:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                description:
+                  type: string
+      responses:
+        '201':
+          description: Task created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                  title:
+                    type: string
+                  description:
+                    type: string
+                    nullable: true
+                  completed:
+                    type: boolean
+                  createdAt:
+                    type: string
+                    format: date-time
+        '400':
+          description: Invalid input
+        '401':
+          description: Unauthorized
+  /tasks/{id}:
+    patch:
+      summary: Toggle Task Status
+      description: Toggles the completed status of a task.
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - completed
+              properties:
+                completed:
+                  type: boolean
+      responses:
+        '200':
+          description: Task updated
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden (Not task owner)
+        '404':
+          description: Task not found
+    delete:
+      summary: Delete Task
+      description: Permanently deletes a task.
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Task deleted
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden (Not task owner)
+        '404':
+          description: Task not found
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
