@@ -1,29 +1,28 @@
 import './App.css'
 
-
 function App() {
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
-      <div className="card" style={{ maxWidth: '480px', width: '100%', textAlign: 'center' }}>
-        <h1 style={{ marginBottom: '8px', color: 'var(--theme-primary)' }}>Task Manager</h1>
-        <p style={{ color: 'var(--theme-text-secondary)', marginBottom: '24px' }}>
+    <div className="app-container">
+      <div className="card card-container">
+        <h1 className="title">Task Manager</h1>
+        <p className="subtitle">
           Monorepo inicializado con el tema <strong>Corporate</strong>
         </p>
 
-        <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', marginBottom: '24px' }}>
+        <div className="button-group">
           <button className="btn btn-primary">Iniciar Sesión</button>
           <button className="btn btn-secondary">Ver Documentación</button>
         </div>
 
-        <hr style={{ border: 'none', borderTop: '1px solid var(--theme-border-default)', margin: '24px 0' }} />
+        <hr className="divider" />
 
-        <div style={{ textAlign: 'left', fontSize: '14px' }}>
-          <h3 style={{ fontSize: '16px', marginBottom: '12px' }}>Tokens de Diseño Activos:</h3>
-          <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            <li>🎨 <strong>Primary Color:</strong> <code style={{ color: 'var(--theme-primary)' }}>#1E40AF</code></li>
-            <li>✍️ <strong>Fuentes:</strong> Inter & Plus Jakarta Sans</li>
-            <li>🛡️ <strong>API Key Gate:</strong> Activo (/api/health)</li>
-            <li>📖 <strong>Interactive Docs:</strong> Swagger UI (/api/docs)</li>
+        <div className="list-container">
+          <h3 className="list-title">Tokens de Diseño Activos:</h3>
+          <ul className="token-list">
+            <li className="token-list-item">🎨 <strong>Primary Color:</strong> <code>#1E40AF</code></li>
+            <li className="token-list-item">✍️ <strong>Fuentes:</strong> Inter & Plus Jakarta Sans</li>
+            <li className="token-list-item">🛡️ <strong>API Key Gate:</strong> Activo (/api/health)</li>
+            <li className="token-list-item">📖 <strong>Interactive Docs:</strong> Swagger UI (/api/docs)</li>
           </ul>
         </div>
       </div>

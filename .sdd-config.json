@@ -20,6 +20,7 @@
   "verbosity": "detailed",
   "docs_language": "es",
   "theme": "corporate",
+  "css_framework": "vanilla",
   "host": "github",
   "project_host": "github",
   "detected_by": "solution-designer",
