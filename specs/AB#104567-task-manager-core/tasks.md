@@ -63,9 +63,9 @@ graph TD
   - [ ] `app/.env.example` creado con todas las variables documentadas
   - [ ] `app/.gitignore` actualizado (node_modules, .env, dist)
   - [ ] `npm run dev` (desde `app/`) arranca ambos servidores
-  - [ ] Design system aplicado — CSS variables del theme Corporate, Google Fonts (Inter + Plus Jakarta Sans), reset y utilidades base en `app/client/src/index.css`
+  - [ ] Design system aplicado — TailwindCSS 4 configurado con variables del theme Corporate, Google Fonts (Inter + Plus Jakarta Sans) cargadas en `app/client/src/index.css` e `index.html`
 - **Dependencias:** Ninguna
-- **Archivos:** `app/package.json`, `app/client/`, `app/server/`, `app/tsconfig.json`, `app/.eslintrc`, `app/.prettierrc`, `app/.env.example`, `app/.gitignore`, `app/client/src/index.css`
+- **Archivos:** `app/package.json`, `app/client/`, `app/server/`, `app/tsconfig.json`, `app/.eslintrc`, `app/.prettierrc`, `app/.env.example`, `app/.gitignore`, `app/client/src/index.css`, `app/client/vite.config.ts`
 
 ### Task 0.2: Base de datos + seed (~2h)
 - **Descripción:** Docker Compose con PostgreSQL 16 Alpine. Inicializar Prisma ORM, crear seed script con usuario de prueba (bcrypt hash, cost 12).
