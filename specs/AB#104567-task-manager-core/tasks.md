@@ -10,9 +10,9 @@
 
 ## Metadata
 - **Based on:** [design.md](./design.md)
-- **Total estimate:** ~28h (incluye 20% buffer)
+- **Total estimate:** ~24h (incluye 20% buffer)
 - **Number of waves:** 4
-- **Number of tasks:** 12
+- **Number of tasks:** 10 (developer) + 2 deferred (QA)
 - **Sprint:** [TBD]
 - **Assignee:** [TBD]
 
@@ -191,29 +191,12 @@ graph TD
 
 ---
 
-## Wave 4: testing & polish (~4h)
+## Wave 4: testing & polish (~1h)
 
-### Task 4.1: Tests de integración API (~2h)
-- **Descripción:** Tests de integración para todos los endpoints contra DB real (Docker). Cubrir happy paths, errores de auth, validación, ownership.
-- **Criterios de aceptación:**
-  - [ ] Setup: DB de test limpia antes de cada suite
-  - [ ] Auth: login exitoso, credenciales inválidas, rate limiting
-  - [ ] Tasks CRUD: crear, listar, completar, eliminar
-  - [ ] Ownership: no acceder/modificar tareas de otro usuario
-  - [ ] Validación: inputs inválidos retornan 400
-  - [ ] API Key: requests sin key retornan 403
-  - [ ] Cobertura ≥ 80% en controllers y middleware
-- **Dependencias:** Task 2.1, Task 2.2
-- **Archivos:** `app/server/tests/`, `app/server/tests/auth.test.ts`, `app/server/tests/tasks.test.ts`, `app/server/jest.config.ts`
+> ⚠️ **T4.1 y T4.2 son responsabilidad QA** — cancelados en ADO (AB#104626, AB#104628). Se abordarán en test-plan.md por el rol QA.
 
-### Task 4.2: Tests E2E (~1h)
-- **Descripción:** Tests end-to-end del flujo completo: login → crear tarea → completar → eliminar.
-- **Criterios de aceptación:**
-  - [ ] Flujo completo: login → ver lista vacía → crear tarea → aparece en lista → completar → eliminar
-  - [ ] Usa `data-testid` para selectors
-  - [ ] Pasa en modo headless (listo para CI)
-- **Dependencias:** Task 3.2
-- **Archivos:** `app/client/tests/e2e/`, `app/playwright.config.ts`
+### ~~Task 4.1: Tests de integración API (~2h)~~ — *Role: QA · Status: Deferred*
+### ~~Task 4.2: Tests E2E (~1h)~~ — *Role: QA · Status: Deferred*
 
 ### Task 4.3: Limpieza + documentación (~1h)
 - **Descripción:** Limpiar código, actualizar README, verificar que no queden TODOs ni dead code.
@@ -241,13 +224,13 @@ graph TD
 | 7 | 2.2 | Controlador de tareas (CRUD) | ~3h | 2.1 |
 | 8 | 3.1 | React + UI de autenticación | ~3h | 2.1 |
 | 9 | 3.2 | UI de lista de tareas | ~3h | 2.2, 3.1 |
-| 10 | 4.1 | Tests de integración API (QA) | ~2h | 2.1, 2.2 |
-| 11 | 4.2 | Tests E2E (QA) | ~1h | 3.2 |
-| 12 | 4.3 | Limpieza + documentación | ~1h | Todas |
+| ~~10~~ | ~~4.1~~ | ~~Tests de integración API~~ | ~~QA~~ | ~~deferred~~ |
+| ~~11~~ | ~~4.2~~ | ~~Tests E2E~~ | ~~QA~~ | ~~deferred~~ |
+| 10 | 4.3 | Limpieza + documentación | ~1h | Todas |
 
-## Total estimate: ~28h (includes 20% buffer)
+## Total estimate: ~24h (includes 20% buffer)
 
-**Estimado base:** 23h · **Buffer (20%):** 5h · **Total:** 28h
+**Estimado base:** 20h · **Buffer (20%):** 4h · **Total:** 24h (developer) · QA tasks deferred
 
 ## Completion Checklist
 - [ ] Todas las tareas completadas
