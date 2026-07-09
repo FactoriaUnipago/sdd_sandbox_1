@@ -73,6 +73,7 @@ Key paths:
 
 - NEVER store test reports in repo (→ Azure DevOps Test Runs)
 - NEVER store credentials outside `.sdd-credentials.json`
-- NEVER create artifacts outside defined structure
+- NEVER create directories or files outside the paths defined in `references/project-tree.md`. If a path doesn't exist in the tree, it's NOT valid. Do NOT invent paths (e.g., `docs/infrastructure/` does NOT exist — deployment info goes in `docs/architecture/system-design.md`)
 - ALWAYS use {prefix}ID in file name for traceability
 - NEVER block commits to LOCAL files (product.md, .sdd-config.json, specs/)
+- NEVER create feature-specific files in `docs/architecture/` — those docs are GLOBAL and accumulate from all features
