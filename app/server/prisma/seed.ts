@@ -1,37 +1,77 @@
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
+import { faker } from '@faker-js/faker';
 
 const prisma = new PrismaClient();
 
 async function main() {
-  const username = 'admin';
-  const plainPassword = 'adminpassword';
-  const saltRounds = 12; // cost 12
+  const adminUsername = 'admin';
+  const adminPassword = 'adminpassword';
+  const saltRounds = 12;
 
-  console.log('Seeding database...');
+  console.log('Resetting database...');
+  // Clear existing data (since cascade delete is configured, deleting users deletes tasks)
+  await prisma.user.deleteMany({});
 
-  // Check if admin already exists
-  const existingAdmin = await prisma.user.findUnique({
-    where: { username },
+  console.log('Seeding database with Faker.js...');
+
+  // 1. Create Admin User
+  console.log('Creating admin user...');
+  const adminPasswordHash = await bcrypt.hash(adminPassword, saltRounds);
+  const adminUser = await prisma.user.create({
+    data: {
+      username: adminUsername,
+      passwordHash: adminPasswordHash,
+    },
   });
 
-  if (existingAdmin) {
-    console.log(`User "${username}" already exists. Skipping creation.`);
-  } else {
-    console.log(`Hashing password for "${username}"...`);
-    const passwordHash = await bcrypt.hash(plainPassword, saltRounds);
+  // 2. Create tasks for Admin
+  console.log('Generating fake tasks for admin...');
+  const adminTasksData = Array.from({ length: 8 }).map(() => ({
+    title: faker.hacker.verb().charAt(0).toUpperCase() + faker.hacker.verb().slice(1) + ' ' + faker.hacker.noun(),
+    description: faker.lorem.paragraph(),
+    completed: faker.datatype.boolean(),
+    createdAt: faker.date.recent({ days: 15 }),
+    userId: adminUser.id,
+  }));
 
-    console.log(`Creating user "${username}"...`);
-    const adminUser = await prisma.user.create({
+  await prisma.task.createMany({
+    data: adminTasksData,
+  });
+
+  // 3. Create other mock users
+  console.log('Generating fake users and tasks...');
+  const commonPasswordHash = await bcrypt.hash('password123', saltRounds);
+
+  for (let i = 0; i < 4; i++) {
+    // Generate unique username
+    const username = faker.internet.username().toLowerCase().slice(0, 15) + faker.number.int({ min: 10, max: 99 });
+    const user = await prisma.user.create({
       data: {
         username,
-        passwordHash,
+        passwordHash: commonPasswordHash,
       },
     });
-    console.log(`User "${username}" created with ID: ${adminUser.id}`);
+
+    const userTasksCount = faker.number.int({ min: 3, max: 6 });
+    const userTasksData = Array.from({ length: userTasksCount }).map(() => ({
+      title: faker.hacker.verb().charAt(0).toUpperCase() + faker.hacker.verb().slice(1) + ' ' + faker.hacker.noun(),
+      description: faker.lorem.paragraph(),
+      completed: faker.datatype.boolean(),
+      createdAt: faker.date.recent({ days: 30 }),
+      userId: user.id,
+    }));
+
+    await prisma.task.createMany({
+      data: userTasksData,
+    });
   }
 
-  console.log('Database seeding completed successfully.');
+  const totalUsers = await prisma.user.count();
+  const totalTasks = await prisma.task.count();
+  console.log(`Database seeding completed successfully!`);
+  console.log(`Created ${totalUsers} users.`);
+  console.log(`Created ${totalTasks} tasks.`);
 }
 
 main()
