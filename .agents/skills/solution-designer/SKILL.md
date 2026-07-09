@@ -192,9 +192,13 @@ Only after ALL checks pass (or are documented as unavailable) → proceed.
 --- DESIGN PERSISTED — now generate tasks ---
 
 12. ☐ **Generate tasks.md** → Read `specs/_templates/tasks-template.md` FIRST, use as scaffold. Implementable task list from design.
+   - ⚠️ **Code root by project_type** — determines where file paths point:
+     - `new` → all "Files to create/modify" paths use `app/` prefix (e.g., `app/package.json`, `app/src/`, `app/server/`). NEVER use repo root for project files.
+     - `existing` → paths follow existing project structure (detect from codebase).
+     - `migration` → same as `existing`.
    - ⚠️ **Greenfield check**: Before generating tasks, verify the repo has the basic infrastructure the tasks assume:
-     - Does `package.json` (or equivalent: `pyproject.toml`, `pom.xml`, `go.mod`, `pubspec.yaml`, `capacitor.config.ts`) exist?
-     - Is the DB configured? (e.g. `docker-compose.yml`, `prisma/schema.prisma`, `.env` with DB connection)
+     - Does `app/package.json` (or equivalent: `pyproject.toml`, `pom.xml`, `go.mod`, `pubspec.yaml`, `capacitor.config.ts`) exist?
+     - Is the DB configured? (e.g. `app/docker-compose.yml`, `app/prisma/schema.prisma`, `.env` with DB connection)
      - Is the framework installed? (e.g. `express`, `fastapi`, etc. in dependencies)
      If ANY of these are missing → add a **Wave 0: Project Setup** with tasks for scaffolding BEFORE the implementation waves.
    - ⚠️ **Environment detection for Wave 0** — PROACTIVE, not reactive. Do NOT propose options one by one waiting for rejection.

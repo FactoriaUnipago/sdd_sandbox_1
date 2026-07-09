@@ -22,7 +22,7 @@
   "host": "github",
   "project_host": "github",
   "detected_by": "solution-designer",
-  "last_sync": "2026-07-08T23:45:16Z",
+  "last_sync": "2026-07-09T00:22:15Z",
   "deployment": {
     "_comment": "Filled by project-scanner or solution-designer. services = stack files to load (empty = load all).",
     "pattern": "fullstack-vercel",

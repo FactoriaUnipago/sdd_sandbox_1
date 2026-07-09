@@ -58,18 +58,34 @@ project/
 
 ### `existing` + `single`
 
-SDD adds `.agents/`, `.agents/`, `specs/`, `docs/`, `product.md`, `.sdd-config.json`, `sdd-sync.sh` around existing code. **NEVER restructure existing code.**
+```
+project/
+├── .agents/ .agents/
+├── specs/, docs/
+├── {project-name}/      ← existing code (cloned from git remote or placed by user)
+├── app/                 ← NEW features/code go here
+│   ├── src/
+│   ├── package.json
+├── product.md, .sdd-config.json, sdd-sync.sh
+```
+
+> **Setup**: Ask user for the git remote URL of the existing project → clone into a named folder (e.g., `git clone <url> {project-name}/`). Alternatively, user places it manually. Existing code is **read-only reference** — never modified by SDD. New features go in `app/`.
 
 ### `migration` + `single`
 
 ```
 project/
+├── .agents/ .agents/
 ├── specs/ (migration-plan.md, {feature}/)
 ├── docs/architecture/migration-map.md
-├── src/  ← migrates in-place (✅ done / 🔄 wip / ❌ pending)
+├── {legacy-name}/       ← legacy code (cloned from git remote or placed by user)
+├── app/                 ← NEW migrated code (same structure as 'new')
+│   ├── src/
+│   ├── package.json
+├── product.md, .sdd-config.json, sdd-sync.sh
 ```
 
-> No `legacy/` folder. Code migrates module by module in-place.
+> **Setup**: Same as `existing` — ask for git remote, clone into folder. Legacy code is **read-only reference** for analysis. New migrated code goes in `app/`. Legacy folder removed when migration is complete.
 
 ### `new` + `monorepo`
 
@@ -134,8 +150,8 @@ specs/ tests/ docs/ db/ .agents/ .cursor/ .windsurf/ .github/copilot/ .sdd-* sdd
 1. The IDE config directories (`.agents/`, `.agents/`, etc.) are NOT manually modified — managed by sync
 2. SDD NEVER moves or restructures existing code — it adds artifacts around it
 3. In monorepos, specs are organized by **feature**, not by package
-4. `app/` is the recommended code root for `new` projects — keeps SDD artifacts separate
-5. For `existing` projects, code stays wherever it already is
+4. `app/` is the code root for ALL project types — repo root is SDD-only territory
+5. For `existing`/`migration`: existing code goes in its own named folder (cloned or placed by user). New code goes in `app/`. NEVER create project files at repo root
 6. NEVER mix specs from different apps in the same `specs/{prefix}[ID]/` folder
 7. ALWAYS use {prefix}ID for cross-repo traceability in multirepo
 8. ALWAYS each deployable app has its own ignore file

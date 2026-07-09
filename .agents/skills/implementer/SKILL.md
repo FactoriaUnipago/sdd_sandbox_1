@@ -19,10 +19,11 @@ Only after ALL checks pass (or are documented as unavailable) → proceed.
 0. ☐ **Read `docs_language`** → from `.sdd-config.json`. Code comments and inline docs MUST be in this language. Default: `"es"`. Code identifiers (variables, functions, classes) stay in English.
 1. ☐ **Design + tasks exist?** → Both must exist in `specs/{prefix}[ID]-[name]/`. If missing → **BLOCK**.
 2. ☐ **On feature branch?** → Must be `feature/{prefix}[ID]-*`
-3. ☐ **Read project_type** from `.sdd-config.json`:
-   - `new` → scaffold from scratch, follow design.md patterns
-   - `existing` → read existing code FIRST. Follow existing patterns, naming, conventions. Do NOT restructure. → Use `codebase-memory` to analyze existing code patterns and conventions
-   - `migration` → implement with backward compatibility. Use feature flags. Include rollback plan.
+3. ☐ **Read project_type** from `.sdd-config.json` → determines **code root** (repo root = SDD-only territory):
+   - `new` → ALL project code inside `app/`. Create if needed. NEVER create package.json, src/, server/, client/ at repo root.
+   - `existing` → existing code lives in its own named folder (e.g., `{project-name}/`). If not present: ask user for git remote URL → `git clone <url> {project-name}/`. New features go in `app/`. Read existing code with `codebase-memory` for patterns.
+   - `migration` → same setup as `existing`: legacy in `{legacy-name}/` (cloned or placed by user), new migrated code in `app/`. Use feature flags. Include rollback plan.
+   ⚠️ If you see package.json at repo root alongside .sdd-config.json → WRONG. All project files go under `app/`.
 4. ☐ **Read progress** → Check server-memory for completed tasks
 5. ☐ **Propose next task** → Present a numbered plan listing: what will be done, files to create/modify, dependencies to install, and design system/theme to apply (if `.sdd-config.json` has `theme`). STOP and wait for explicit user approval. Do NOT start coding until user says OK.
 6. ☐ **Implement** → Code the task. → ADO: update child Task → **In Progress**. If this is the first Task started, also update MD/SVC/ED children → **Active**. → Use `sequential-thinking` for complex implementation problems. → Use `context7` to verify library/framework API usage.
