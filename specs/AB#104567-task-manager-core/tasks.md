@@ -32,19 +32,21 @@ Ver `estimation-strategy.md` para reglas completas, multiplicadores AI e impacto
 ```mermaid
 graph TD
     T0_1["T0.1: Inicialización del proyecto"] --> T0_2["T0.2: Base de datos + seed"]
-    T0_1 --> T1_1["T1.1: Schema Prisma + migraciones"]
-    T0_2 --> T1_1
-    T1_1 --> T1_2["T1.2: Servidor Express + middlewares"]
-    T1_2 --> T2_1["T2.1: Auth — Login"]
-    T1_2 --> T2_2["T2.2: Tareas — CRUD"]
-    T2_1 --> T2_2
+    T0_2 --> T0_3["T0.3: IaC + AWS RDS"]
+    T0_1 --> T1_2["T1.2: Servidor Express + middlewares"]
+    T0_2 --> T1_1["T1.1: Schema Prisma + migraciones"]
+    T1_1 --> T2_1["T2.1: Auth — Login"]
+    T1_2 --> T2_1
+    T2_1 --> T2_2["T2.2: Tareas — CRUD"]
     T2_1 --> T3_1["T3.1: React + UI de autenticación"]
     T2_2 --> T3_2["T3.2: UI de tareas"]
     T3_1 --> T3_2
-    T3_2 --> T4_1["T4.1: Tests de integración API"]
-    T3_2 --> T4_2["T4.2: Tests E2E"]
-    T4_1 --> T4_3["T4.3: Limpieza + documentación"]
-    T4_2 --> T4_3
+    T3_2 --> T4_3["T4.3: Limpieza + documentación"]
+
+    T2_2 -.-> T4_1["T4.1: Tests integración (QA)"]:::qa
+    T3_2 -.-> T4_2["T4.2: Tests E2E (QA)"]:::qa
+
+    classDef qa fill:#6b7280,stroke:#374151,color:#d1d5db,stroke-dasharray: 5 5
 ```
 
 ---
