@@ -22,6 +22,7 @@ Key paths:
 | `tests/data/` | test-data-generator | `{prefix}[ID]-seed.sql` |
 | `tests/reports/` | — | ⚠️ GITIGNORED |
 | `docs/api/` | doc-generator | openapi.yaml |
+| `docs/architecture/` | scanner/designer | ⚠️ **GLOBAL** — system-design, data-model, api-contract, security-model, integrations. Accumulates from ALL features. NEVER feature-specific. |
 | `docs/diagrams/` | solution-designer | infrastructure.py/.png, `{prefix}[ID]-[name].svg` |
 | `docs/releases/` | release-notes-writer | vX.Y.Z.md |
 | `db/migrations/` | db-migrator | NNN_description.sql |
