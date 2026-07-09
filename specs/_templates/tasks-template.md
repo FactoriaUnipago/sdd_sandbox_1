@@ -75,6 +75,13 @@ graph TD
   <!-- e.g.: Linter/formatter configured -->
   <!-- e.g.: .env.example created with required vars documented -->
   <!-- e.g.: Design system applied — CSS variables from theme, Google Fonts, reset (if frontend project with theme in .sdd-config.json) -->
+  <!-- FRONTEND ONLY: Default App page renders a smoke test card (NO buttons) showing active design tokens: -->
+  <!-- - Project name + theme name -->
+  <!-- - Active primary color (rendered in that color) -->
+  <!-- - Active fonts -->
+  <!-- - API endpoints (health, docs) if backend exists -->
+  <!-- This page confirms the theme is correctly wired. It gets replaced when actual UI pages are built. -->
+  <!-- Use CSS classes from index.css, NOT inline styles. -->
 - **Dependencies:** None
 - **Files to create/modify:** [list actual files]
 

@@ -17,6 +17,20 @@ Themes: `fintech` · `healthcare` · `corporate` · `insurtech` · `govtech` · 
 
 NEVER use hardcoded colors without consulting the theme.
 
+## CSS Framework
+
+Check `css_framework` in `.sdd-config.json`:
+
+| Value | Behavior |
+|---|---|
+| `"vanilla"` (default) | CSS custom properties + component classes in `.css` files |
+| `"tailwind"` | Tailwind CSS 4 utility classes — theme tokens mapped to `tailwind.config.ts` |
+
+- If `css_framework` is not set → default to `"vanilla"`
+- If Tailwind → set `css_framework: "tailwind"` → map theme tokens to `tailwind.config.ts`
+- **NEVER mix**: if Tailwind, all styling via utilities. If vanilla, all via `.css` classes. No hybrid.
+
+
 ## Tokens
 
 > Full CSS: `references/design-tokens.css`
@@ -167,3 +181,31 @@ Required meta tag: `<meta name="viewport" content="width=device-width, initial-s
 | `lg` | 1024px | Tablets landscape / small laptops |
 | `xl` | 1280px | Desktops |
 | `2xl` | 1536px | Large desktops |
+
+## Rules
+
+1. **Use CSS classes, not inline styles** — components MUST use design system classes (`.card`, `.btn-primary`, `.input`, etc.). NEVER replicate layout/spacing/colors inline.
+   ```tsx
+   // ❌ WRONG
+   <div style={{ minHeight: '100vh', display: 'flex', background: '#1E40AF' }}>
+   
+   // ✅ CORRECT
+   <div className="page-centered">
+   ```
+
+2. **CSS variables belong in stylesheets** — `var(--theme-primary)` goes in `.css` files, not in JSX `style={}` attributes.
+   ```css
+   /* ❌ WRONG — in JSX */
+   style={{ color: 'var(--theme-primary)' }}
+   
+   /* ✅ CORRECT — in .css */
+   .title { color: var(--theme-primary); }
+   ```
+
+3. **Inline styles ONLY for runtime-dynamic values** — values computed from state/props/data at runtime (e.g., `width: ${progress}%`, `transform: translateX(${offset}px)`). If the value is static, it belongs in CSS.
+
+4. **Theme tokens are mandatory** — NEVER hardcode colors, spacing, shadows, or fonts. Always use design system tokens (`var(--theme-*)`, `var(--space-*)`, `var(--shadow-*)`).
+
+5. **Component CSS files** — each component has its own `.css` file using design system tokens. No utility-class soup unless using Tailwind (only if user requested).
+
+6. **Base styles in index.css** — reset, theme variables, global typography, shared component classes (`.card`, `.btn`, `.input`, etc.) all live in the entry CSS file.

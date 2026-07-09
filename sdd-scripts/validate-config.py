@@ -87,6 +87,7 @@ def main():
         'repo_type': ['monorepo', 'single', 'multi', ''],
         'host': ['github', 'azure', ''],
         'project_host': ['github', 'azure', ''],
+        'css_framework': ['vanilla', 'tailwind', ''],
     }
 
     VALID_STACKS = [

@@ -130,18 +130,19 @@ Only after ALL checks pass (or are documented as unavailable) → proceed.
 --- DESIGN APPROVED — persist immediately ---
 
 6. ☐ **Mark `- [x]`** in `## Approval` section of design.md → Replace `_____` with approver name from `git config user.name` + current date. Example: `- [x] Developer: Ana García Date: 2026-07-05`
-7. ☐ **Persist stacks + theme** → Only AFTER design approval:
-   1. Update `.sdd-config.json` → `stacks[]`, `theme`, `detected_by: "solution-designer"`, `last_sync` ISO 8601
+7. ☐ **Persist stacks + theme + css_framework** → Only AFTER design approval:
+   1. Update `.sdd-config.json` → `stacks[]`, `theme`, `css_framework`, `detected_by: "solution-designer"`, `last_sync` ISO 8601
    2. Detect IDE from `.sdd-config.json` field `ide` (or detect: `.agents/` exists → kiro, `.agents/` exists → antigravity)
    3. Run `bash sdd-sync.sh --ide {detected_ide}` to sync stack skills + theme to the correct IDE folder:
       - Kiro → `.agents/skills/`
       - Antigravity → `.agents/skills/` + `.agents/rules/`
    4. Show what was activated:
       ```
-      ✅ Stacks + theme synced:
+      ✅ Stacks + theme + CSS framework synced:
         📦 stacks: [...] → synced to IDE steering folder
         🎨 {theme} → synced to IDE steering folder
-        📦 .sdd-config.json → stacks: [...], theme: "{theme}"
+        🎨 css_framework: {vanilla|tailwind} → set in config
+        📦 .sdd-config.json → stacks: [...], theme: "{theme}", css_framework: "{framework}"
       ```
    - If sdd-sync.sh not found or fails → inform: "Run `bash sdd-sync.sh --ide {ide}` manually to sync stacks."
 8. ☐ **Update ADO (design artifacts)** → Tag `design-approved` on Requirement WI + Story Points ← sum of estimates
@@ -355,7 +356,26 @@ If user chooses `custom`:
 2. Generate `THEME_CUSTOM.md` from `core/themes/THEME_CUSTOM.md` template, filling in the user's values
 3. Set `theme: "custom"` in design.md
 
-Persisted in step 6 (after approval). Do NOT write to config yet.
+**CSS Framework** — after theme is selected, depends on frontend stack:
+
+| Stack | What happens |
+|---|---|
+| Web (React, Angular, Vue) | Ask: vanilla vs Tailwind |
+| Capacitor (WebView) | Same as web — ask: vanilla vs Tailwind |
+| Flutter | **Skip** — theme tokens map to `ThemeData` / `ColorScheme` automatically |
+
+If CSS applies (web / Capacitor):
+> "¿Para los estilos prefieres Vanilla CSS (custom properties + clases .css) o TailwindCSS 4? Recomiendo Vanilla CSS por mayor control y cero dependencias."
+
+- If Tailwind → set `css_framework: "tailwind"` in design.md (always Tailwind CSS 4)
+- If vanilla or no preference → set `css_framework: "vanilla"` (default)
+
+If Flutter → set `css_framework: ""` (not applicable). Theme tokens from `THEME_[NAME].md` map to:
+- `ColorScheme` → primary, secondary, surface, error colors
+- `TextTheme` → font family, sizes, weights
+- `ThemeData` → border radius, shadows, spacing via custom extension
+
+Persisted in step 7 (after approval). Do NOT write to config yet.
 
 2b. **Stack selection** (only if `stacks[]` empty): Read `tech.md`, recommend from approved list as table (Layer|Recommended|Alternative|Justification). Flag unapproved libs ⚠️. Approval → update config → `sdd-sync.sh`.
 

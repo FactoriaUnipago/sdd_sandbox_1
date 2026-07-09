@@ -11,6 +11,7 @@
   "verbosity": "detailed",
   "docs_language": "es",
   "theme": "",
+  "css_framework": "",
   "host": "",
   "project_host": "",
   "detected_by": "",
