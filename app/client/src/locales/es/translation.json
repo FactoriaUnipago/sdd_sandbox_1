@@ -1,0 +1,18 @@
+{
+  "app": {
+    "title": "Task Manager",
+    "subtitle": "Proyecto inicializado con el tema <1>Corporate</1> usando TailwindCSS 4",
+    "viewDocs": "Ver Documentación"
+  },
+  "auth": {
+    "login": "Iniciar Sesión"
+  },
+  "tokens": {
+    "title": "Tokens de Diseño Activos:",
+    "primaryColor": "Color Primario",
+    "fonts": "Fuentes",
+    "apiKeyGate": "API Key Gate",
+    "active": "Activo",
+    "interactiveDocs": "Interactive Docs"
+  }
+}

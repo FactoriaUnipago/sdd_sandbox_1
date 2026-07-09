@@ -16,7 +16,7 @@
     "antigravity"
   ],
   "role": "developer",
-  "repo_type": "monorepo",
+  "repo_type": "single",
   "verbosity": "detailed",
   "docs_language": "es",
   "theme": "corporate",
