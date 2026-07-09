@@ -9,7 +9,8 @@
     "express",
     "react",
     "postgresql",
-    "prisma"
+    "prisma",
+    "typescript"
   ],
   "ides": [
     "antigravity"
