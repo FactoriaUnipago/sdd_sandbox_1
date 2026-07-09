@@ -52,30 +52,30 @@ graph TD
 ## Wave 0: project setup (~7h)
 
 ### Task 0.1: Inicialización del proyecto (~2h)
-- **Descripción:** Inicializar monorepo con estructura fullstack: `/client` (React + Vite + TypeScript), `/server` (Express + TypeScript). Configurar linting, tsconfig, scripts de desarrollo.
+- **Descripción:** Inicializar monorepo con estructura fullstack: `app/client` (React + Vite + TypeScript), `app/server` (Express + TypeScript). Todo el código del proyecto dentro de `app/` (repo root = solo artefactos SDD).
 - **Criterios de aceptación:**
-  - [ ] `package.json` raíz con scripts para client/server
-  - [ ] `/client` inicializado con Vite + React 18 + TypeScript
-  - [ ] `/server` inicializado con Express 5 + TypeScript + ts-node
-  - [ ] ESLint + Prettier configurados
-  - [ ] `.env.example` creado con todas las variables documentadas
-  - [ ] `.gitignore` actualizado (node_modules, .env, dist)
-  - [ ] `npm run dev` arranca ambos servidores
-  - [ ] Design system aplicado — CSS variables del theme Corporate, Google Fonts (Inter + Plus Jakarta Sans), reset y utilidades base en `client/src/index.css`
+  - [ ] `app/package.json` raíz con scripts para client/server
+  - [ ] `app/client/` inicializado con Vite + React 18 + TypeScript
+  - [ ] `app/server/` inicializado con Express 5 + TypeScript + ts-node
+  - [ ] ESLint + Prettier configurados en `app/`
+  - [ ] `app/.env.example` creado con todas las variables documentadas
+  - [ ] `app/.gitignore` actualizado (node_modules, .env, dist)
+  - [ ] `npm run dev` (desde `app/`) arranca ambos servidores
+  - [ ] Design system aplicado — CSS variables del theme Corporate, Google Fonts (Inter + Plus Jakarta Sans), reset y utilidades base en `app/client/src/index.css`
 - **Dependencias:** Ninguna
-- **Archivos:** `package.json`, `client/`, `server/`, `tsconfig.json`, `.eslintrc`, `.prettierrc`, `.env.example`, `.gitignore`, `client/src/index.css`
+- **Archivos:** `app/package.json`, `app/client/`, `app/server/`, `app/tsconfig.json`, `app/.eslintrc`, `app/.prettierrc`, `app/.env.example`, `app/.gitignore`, `app/client/src/index.css`
 
 ### Task 0.2: Base de datos + seed (~2h)
 - **Descripción:** Docker Compose con PostgreSQL 16 Alpine. Inicializar Prisma ORM, crear seed script con usuario de prueba (bcrypt hash, cost 12).
 - **Criterios de aceptación:**
-  - [ ] `docker-compose.yml` con postgres:16-alpine en port 5432
-  - [ ] Prisma inicializado (`prisma init`)
-  - [ ] `.env` con `DATABASE_URL` apuntando a Docker
+  - [ ] `app/docker-compose.yml` con postgres:16-alpine en port 5432
+  - [ ] Prisma inicializado (`prisma init`) en `app/server/`
+  - [ ] `app/.env` con `DATABASE_URL` apuntando a Docker
   - [ ] Seed script crea usuario `admin` con password hasheado (bcrypt cost 12)
   - [ ] `npm run db:seed` ejecuta el seed
   - [ ] `npm run db:reset` limpia y re-seedea
 - **Dependencias:** Task 0.1
-- **Archivos:** `docker-compose.yml`, `server/prisma/`, `server/prisma/seed.ts`, `.env`
+- **Archivos:** `app/docker-compose.yml`, `app/server/prisma/`, `app/server/prisma/seed.ts`, `app/.env`
 
 ### Task 0.3: IaC + AWS RDS provisioning (~3h)
 - **Descripción:** Provisionar base de datos PostgreSQL en AWS RDS para entorno remoto (dev/cert/prod). Configurar via CDK o Terraform según preferencia. Incluir security groups, parameter groups y connection string.
@@ -103,7 +103,7 @@ graph TD
   - [ ] Migration generada y aplicable (`npx prisma migrate dev`)
   - [ ] `npx prisma generate` genera client sin errores
 - **Dependencias:** Task 0.2
-- **Archivos:** `server/prisma/schema.prisma`, `server/prisma/migrations/`
+- **Archivos:** `app/server/prisma/schema.prisma`, `app/server/prisma/migrations/`
 
 ### Task 1.2: Servidor Express + cadena de middlewares (~2h)
 - **Descripción:** Configurar Express 5 con la cadena de middlewares definida en security-model.md: cors → helmet → rateLimit → express.json → apiKeyGate → routes. Incluir health check.
@@ -117,7 +117,7 @@ graph TD
   - [ ] `GET /api/health` retorna `{ status: "ok", database, uptime, version }`
   - [ ] Health check verifica conexión a DB (Prisma)
 - **Dependencias:** Task 0.1
-- **Archivos:** `server/src/index.ts`, `server/src/middleware/apiKeyGate.ts`, `server/src/middleware/rateLimiter.ts`, `server/src/routes/health.ts`
+- **Archivos:** `app/server/src/index.ts`, `app/server/src/middleware/apiKeyGate.ts`, `app/server/src/middleware/rateLimiter.ts`, `app/server/src/routes/health.ts`
 
 ---
 
@@ -136,7 +136,7 @@ graph TD
   - [ ] Rate limiter específico: 5 intentos/15min en login
   - [ ] Unit tests: happy path + credenciales inválidas + input inválido
 - **Dependencias:** Task 1.1, Task 1.2
-- **Archivos:** `server/src/routes/auth.ts`, `server/src/controllers/authController.ts`, `server/src/middleware/authMiddleware.ts`, `server/src/validators/authValidator.ts`
+- **Archivos:** `app/server/src/routes/auth.ts`, `app/server/src/controllers/authController.ts`, `app/server/src/middleware/authMiddleware.ts`, `app/server/src/validators/authValidator.ts`
 - **ADO WI:** [AB#104594](https://dev.azure.com/unipagosa/SDD_SANDBOX/_workitems/edit/104594)
 
 ### Task 2.2: Controlador de tareas — CRUD completo (~3h)
@@ -151,7 +151,7 @@ graph TD
   - [ ] 404 si tarea no existe o no pertenece al usuario
   - [ ] Unit tests por endpoint: happy path + ownership + validación
 - **Dependencias:** Task 2.1 (necesita authMiddleware)
-- **Archivos:** `server/src/routes/tasks.ts`, `server/src/controllers/taskController.ts`, `server/src/validators/taskValidator.ts`
+- **Archivos:** `app/server/src/routes/tasks.ts`, `app/server/src/controllers/taskController.ts`, `app/server/src/validators/taskValidator.ts`
 
 ---
 
@@ -170,7 +170,7 @@ graph TD
   - [ ] Logout: limpia token + redirige a login
   - [ ] Responsive (320px–1920px) — NFR-002
 - **Dependencias:** Task 2.1
-- **Archivos:** `client/src/context/AuthContext.tsx`, `client/src/services/apiClient.ts`, `client/src/pages/LoginPage.tsx`, `client/src/components/ProtectedRoute.tsx`
+- **Archivos:** `app/client/src/context/AuthContext.tsx`, `app/client/src/services/apiClient.ts`, `app/client/src/pages/LoginPage.tsx`, `app/client/src/components/ProtectedRoute.tsx`
 
 ### Task 3.2: UI de lista de tareas + CRUD (~3h)
 - **Descripción:** Página principal con lista de tareas y formulario para crear. Botones de completar/descompletar y eliminar con confirmación.
@@ -187,7 +187,7 @@ graph TD
   - [ ] Responsive (320px–1920px) — NFR-002
   - [ ] Accesible: labels, contraste, navegación por teclado — NFR-004
 - **Dependencias:** Task 2.2, Task 3.1
-- **Archivos:** `client/src/pages/TaskListPage.tsx`, `client/src/components/TaskForm.tsx`, `client/src/components/TaskItem.tsx`
+- **Archivos:** `app/client/src/pages/TaskListPage.tsx`, `app/client/src/components/TaskForm.tsx`, `app/client/src/components/TaskItem.tsx`
 
 ---
 
@@ -204,7 +204,7 @@ graph TD
   - [ ] API Key: requests sin key retornan 403
   - [ ] Cobertura ≥ 80% en controllers y middleware
 - **Dependencias:** Task 2.1, Task 2.2
-- **Archivos:** `server/tests/`, `server/tests/auth.test.ts`, `server/tests/tasks.test.ts`, `server/jest.config.ts`
+- **Archivos:** `app/server/tests/`, `app/server/tests/auth.test.ts`, `app/server/tests/tasks.test.ts`, `app/server/jest.config.ts`
 
 ### Task 4.2: Tests E2E (~1h)
 - **Descripción:** Tests end-to-end del flujo completo: login → crear tarea → completar → eliminar.
@@ -213,7 +213,7 @@ graph TD
   - [ ] Usa `data-testid` para selectors
   - [ ] Pasa en modo headless (listo para CI)
 - **Dependencias:** Task 3.2
-- **Archivos:** `client/tests/e2e/`, `playwright.config.ts`
+- **Archivos:** `app/client/tests/e2e/`, `app/playwright.config.ts`
 
 ### Task 4.3: Limpieza + documentación (~1h)
 - **Descripción:** Limpiar código, actualizar README, verificar que no queden TODOs ni dead code.
@@ -224,7 +224,7 @@ graph TD
   - [ ] ESLint + Prettier sin warnings
   - [ ] `.env.example` completo y documentado
 - **Dependencias:** Todas las anteriores
-- **Archivos:** `README.md`, limpieza general
+- **Archivos:** `app/README.md`, limpieza general
 
 ---
 
