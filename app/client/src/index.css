@@ -1,0 +1,172 @@
+/* CSS variables based on THEME_CORPORATE.md */
+:root {
+  /* Colors */
+  --theme-primary: #1E40AF;
+  --theme-accent: #64748B;
+  --theme-accent-hover: #475569;
+  --theme-accent-muted: rgba(100, 116, 139, 0.12);
+  --theme-success: #16A34A;
+  --theme-success-muted: rgba(22, 163, 74, 0.12);
+  --theme-warning: #CA8A04;
+  --theme-warning-muted: rgba(202, 138, 4, 0.12);
+  --theme-error: #DC2626;
+  --theme-error-muted: rgba(220, 38, 38, 0.12);
+  --theme-text: #0F172A;
+  --theme-text-secondary: #64748B;
+  --theme-text-disabled: #94A3B8;
+
+  /* Surfaces */
+  --theme-page: #F8FAFC;
+  --theme-card: #FFFFFF;
+  --theme-elevated: #FFFFFF;
+  --theme-input: #F1F5F9;
+  --theme-input-hover: #E2E8F0;
+  --theme-overlay: rgba(0, 0, 0, 0.4);
+
+  /* Borders */
+  --theme-border-default: rgba(15, 23, 42, 0.12);
+  --theme-border-subtle: rgba(15, 23, 42, 0.06);
+  --theme-border-focus: rgba(30, 64, 175, 0.4);
+  --theme-border-error: rgba(220, 38, 38, 0.4);
+  --theme-border-divider: rgba(15, 23, 42, 0.06);
+
+  /* Glass */
+  --theme-glass-bg: rgba(255, 255, 255, 0.93);
+  --theme-glass-blur: 6px;
+  --theme-glass-border: 1px solid rgba(30, 64, 175, 0.06);
+  --theme-glass-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+
+  /* Typography */
+  --font-family-base: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  --font-family-headings: 'Plus Jakarta Sans', var(--font-family-base);
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  
+  --line-height-body: 1.6;
+  --line-height-heading: 1.2;
+  --line-height-compact: 1.4;
+
+  /* Gradients */
+  --theme-gradient-primary: linear-gradient(135deg, #1E40AF, #1E3A8A);
+  --theme-gradient-surface: linear-gradient(180deg, #F8FAFC, #FFFFFF);
+  --theme-gradient-accent-subtle: linear-gradient(135deg, rgba(30, 64, 175, 0.06), rgba(30, 64, 175, 0.02));
+
+  /* Motion */
+  --theme-motion-fast: 150ms;
+  --theme-motion-normal: 250ms;
+  --theme-motion-slow: 400ms;
+  --theme-motion-easing: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Spacing (4px grid) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* Border Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 6px rgba(0,0,0,0.07);
+  --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+  --shadow-xl: 0 20px 25px rgba(0,0,0,0.15);
+}
+
+/* Basic Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family-base);
+  font-size: 16px;
+  line-height: var(--line-height-body);
+  font-weight: var(--font-weight-regular);
+  color: var(--theme-text);
+  background-color: var(--theme-page);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-family-headings);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-heading);
+  color: var(--theme-text);
+  letter-spacing: -0.02em;
+}
+
+a {
+  color: var(--theme-primary);
+  text-decoration: none;
+  transition: color var(--theme-motion-fast) var(--theme-motion-easing);
+}
+
+a:hover {
+  color: var(--theme-accent-hover);
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+/* Basic Utility Classes */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2) var(--space-4);
+  font-weight: var(--font-weight-medium);
+  border-radius: var(--radius-md);
+  transition: all var(--theme-motion-fast) var(--theme-motion-easing);
+}
+
+.btn-primary {
+  background: var(--theme-gradient-primary);
+  color: #FFFFFF;
+}
+
+.btn-primary:hover {
+  opacity: 0.95;
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background-color: var(--theme-page);
+  color: var(--theme-text);
+  border: 1px solid var(--theme-border-default);
+}
+
+.btn-secondary:hover {
+  background-color: var(--theme-input-hover);
+}
+
+.card {
+  background-color: var(--theme-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--theme-border-default);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-6);
+}
