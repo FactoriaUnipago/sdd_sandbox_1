@@ -28,8 +28,9 @@ Only after ALL checks pass (or are documented as unavailable) → proceed.
 5. ☐ **Propose next task** → Present a numbered plan listing: what will be done, files to create/modify, dependencies to install, and design system/theme to apply (if `.sdd-config.json` has `theme`). STOP and wait for explicit user approval. Do NOT start coding until user says OK.
 6. ☐ **Implement** → Code the task. → ADO: update child Task → **In Progress**. If this is the first Task started, also update MD/SVC/ED children → **Active**. → Use `sequential-thinking` for complex implementation problems. → Use `context7` to verify library/framework API usage.
 7. ☐ **Run lint + tests** → Must pass before proceeding. → Use `eslint` for JS/TS linting. → If `python-analyzer` available: lint Python files. → If `playwright` available: run E2E tests for UI components.
-8. ☐ **Commit per task** → `git add + commit + push` after EACH completed task. ⚠️ Push is MANDATORY — commit without push = incomplete.
-9. ☐ **Update tasks.md** → Mark `- [x]` on completed task
+8. ☐ **Commit per task** → `git add + commit + push` after EACH task. ⚠️ Push is MANDATORY. ADO child Task stays **In Progress** (NOT completed yet).
+9. ☐ **Present for review** → Show user: files created/modified, key decisions, links to review. STOP and wait for explicit approval. Do NOT mark as completed, do NOT update tasks.md to `[x]`, do NOT close ADO task until user approves.
+9a. ☐ **After user approves** → Mark `- [x]` in tasks.md. Update ADO child Task → **Completed**.
 10. ☐ **All done?** → Update ADO → close child Task WIs as completed, parent state → Ready for QA, Tag: `implementation-complete`. Ask: "Assign QA?". → If `vercel` available: create preview deployment for frontend testing.
     - After closing all Tasks, also mark child Modelo de Datos, Servicio, Estructuras de Datos WIs as Resolved (if they exist). Query: `wit_query_work_items` parent={work_wi_id} type in (Modelo de Datos, Servicio, Estructuras de Datos)
 11. ☐ **Assign tasks** → Each Task inherits `developer_email` from parent WI (`System.AssignedTo` of parent or server-memory)
@@ -112,13 +113,16 @@ For each task:
      - pending: 6, 7, 8, 9
    ```
 
-10. **Report and STOP**:
-     ```
-     Task 4 ✅ — Column component
-     Files: src/components/Column.tsx, Column.css
-     Lint: ✅ | Tests: ✅ (2 passing)
-     ```
-     STOP. Show completed task status. Ask: "Continue with the next task?" Wait for explicit approval. Do NOT suggest or execute role changes.
+10. **Present for review and STOP**:
+      ```
+      Task 4 — Column component
+      Files: src/components/Column.tsx, Column.css
+      Lint: ✅ | Tests: ✅ (2 passing)
+      Status: Committed + pushed. Awaiting your review.
+      ```
+      STOP. Show files for user review. Ask: "¿Lo revisas y me dices si procedo?" Wait for explicit approval.
+      ⚠️ NEVER mark task as ✅ completed before user approves. Task stays as 🔄 until then.
+      After user approves → mark `[x]` in tasks.md, update ADO → Completed, then ask: "Continue with next task?"
 
 ### Completion
 
