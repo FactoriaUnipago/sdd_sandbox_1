@@ -76,6 +76,35 @@
     "@aws-cdk/core:cfnIncludeRejectComplexResourceUpdateCreatePolicyIntrinsics": true,
     "@aws-cdk/aws-lambda-nodejs:sdkV3ExcludeSmithyPackages": true,
     "@aws-cdk/aws-stepfunctions-tasks:fixRunEcsTaskPolicy": true,
-    "@aws-cdk/aws-ec2:bastionHostUseAmazonLinux2023ByDefault": true
+    "@aws-cdk/aws-ec2:bastionHostUseAmazonLinux2023ByDefault": true,
+    "environments": {
+      "dev": {
+        "vpcId": "",
+        "dbInstanceType": "t4g.micro",
+        "allocatedStorage": 20,
+        "maxAllocatedStorage": 100,
+        "backupRetentionDays": 7,
+        "deletionProtection": false,
+        "removalPolicy": "DESTROY"
+      },
+      "cert": {
+        "vpcId": "",
+        "dbInstanceType": "t4g.micro",
+        "allocatedStorage": 20,
+        "maxAllocatedStorage": 100,
+        "backupRetentionDays": 7,
+        "deletionProtection": true,
+        "removalPolicy": "DESTROY"
+      },
+      "prod": {
+        "vpcId": "vpc-0123456789abcdef0",
+        "dbInstanceType": "t4g.small",
+        "allocatedStorage": 50,
+        "maxAllocatedStorage": 200,
+        "backupRetentionDays": 30,
+        "deletionProtection": true,
+        "removalPolicy": "RETAIN"
+      }
+    }
   }
 }

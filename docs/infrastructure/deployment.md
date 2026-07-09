@@ -29,22 +29,29 @@ npx cdk bootstrap
 ```
 
 ### 2. Sintetizar la plantilla CloudFormation
-Genera el archivo CloudFormation equivalente en JSON/YAML a partir de nuestro código de CDK. Esto sirve para verificar la sintaxis y asegurar que la plantilla compile limpiamente:
+Genera el archivo CloudFormation equivalente en JSON/YAML a partir de nuestro código de CDK. Especifica el entorno usando `-c env=[dev|cert|prod]`:
 ```bash
-npx cdk synth
+npx cdk synth -c env=dev
 ```
 
 ### 3. Desplegar los recursos en AWS
-Este comando inicia la creación de la base de datos RDS, la VPC, y los grupos de seguridad configurados en AWS:
+Este comando inicia la creación de la base de datos RDS, la VPC, y los grupos de seguridad configurados en AWS para el entorno seleccionado:
 ```bash
-npx cdk deploy
+# Desplegar en desarrollo (crea VPC nueva por defecto)
+npx cdk deploy -c env=dev
+
+# Desplegar en certificación/staging (crea VPC nueva por defecto)
+npx cdk deploy -c env=cert
+
+# Desplegar en producción (importa VPC existente especificada en cdk.json)
+npx cdk deploy -c env=prod
 ```
 *Durante el despliegue, CDK te pedirá confirmación de los cambios de seguridad (Security Group e IAM Roles). Escribe `y` para proceder.*
 
 ### 4. Destruir los recursos (Cleanup)
-Si necesitas dar de baja la base de datos y limpiar todos los recursos de la cuenta para no incurrir en costos continuos:
+Si necesitas dar de baja la base de datos y limpiar todos los recursos de la cuenta para un entorno específico:
 ```bash
-npx cdk destroy
+npx cdk destroy -c env=dev
 ```
 
 ---
