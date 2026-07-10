@@ -2,9 +2,11 @@ import express, { Request, Response } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import dotenv from 'dotenv';
-
 import path from 'path';
 import fs from 'fs';
+import { globalRateLimiter } from './middleware/rateLimiter';
+import { apiKeyGate } from './middleware/apiKeyGate';
+import { prisma } from './lib/prisma';
 
 // Load env variables
 dotenv.config({ path: '../.env' });
@@ -13,8 +15,8 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const CORS_ORIGIN = process.env.CORS_ORIGIN || 'http://localhost:5173';
 
-// Middlewares
-// Configure Helmet with CSP to allow Swagger UI & ReDoc from CDN and Google Fonts
+// ─── Middleware Chain (cors → helmet → rateLimit → json → apiKeyGate) ───
+app.use(cors({ origin: CORS_ORIGIN }));
 app.use(
   helmet({
     contentSecurityPolicy: {
@@ -29,8 +31,33 @@ app.use(
     },
   })
 );
-app.use(cors({ origin: CORS_ORIGIN }));
+app.use(globalRateLimiter);
 app.use(express.json({ limit: '10kb' }));
+app.use(apiKeyGate);
+
+// ─── Routes ───
+
+// Health Check — verifies DB connection
+app.get('/api/health', async (_req: Request, res: Response) => {
+  try {
+    await prisma.$queryRaw`SELECT 1`;
+    res.json({
+      status: 'ok',
+      database: 'connected',
+      uptime: process.uptime(),
+      version: '1.0.0',
+      timestamp: new Date().toISOString(),
+    });
+  } catch {
+    res.status(503).json({
+      status: 'error',
+      database: 'disconnected',
+      uptime: process.uptime(),
+      version: '1.0.0',
+      timestamp: new Date().toISOString(),
+    });
+  }
+});
 
 // API Documentation routes
 const openApiSpecPath = path.join(__dirname, '../../../docs/api/openapi.yaml');
@@ -110,17 +137,7 @@ app.get('/api/redoc', (req: Request, res: Response) => {
   res.send(redocHtml);
 });
 
-
-// Basic route
-app.get('/api/health', (req: Request, res: Response) => {
-  res.json({
-    status: 'ok',
-    timestamp: new Date().toISOString(),
-    uptime: process.uptime(),
-    version: '1.0.0'
-  });
-});
-
+// ─── Server ───
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

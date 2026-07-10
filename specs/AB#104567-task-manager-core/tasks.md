@@ -99,27 +99,27 @@ graph TD
 ### Task 1.1: Schema Prisma + migraciones (~2h)
 - **Descripción:** Crear schema de Prisma con modelos User y Task según design.md §Database Schema. Generar y aplicar migration inicial.
 - **Criterios de aceptación:**
-  - [ ] Modelo `User`: id (UUID), username (unique), passwordHash, createdAt
-  - [ ] Modelo `Task`: id (UUID), title, description (optional), completed (default false), createdAt, userId (FK → User)
-  - [ ] Índices: `idx_tasks_user_id`, `idx_tasks_created_at` DESC
-  - [ ] Migration generada y aplicable (`npx prisma migrate dev`)
-  - [ ] `npx prisma generate` genera client sin errores
+  - [x] Modelo `User`: id (UUID), username (unique), passwordHash, createdAt
+  - [x] Modelo `Task`: id (UUID), title, description (optional), completed (default false), createdAt, userId (FK → User)
+  - [x] Índices: `idx_tasks_user_id`, `idx_tasks_created_at` DESC
+  - [x] Migration generada y aplicable (`npx prisma migrate dev`)
+  - [x] `npx prisma generate` genera client sin errores
 - **Dependencias:** Task 0.2
 - **Archivos:** `app/server/prisma/schema.prisma`, `app/server/prisma/migrations/`
 
 ### Task 1.2: Servidor Express + cadena de middlewares (~2h)
 - **Descripción:** Configurar Express 5 con la cadena de middlewares definida en security-model.md: cors → helmet → rateLimit → express.json → apiKeyGate → routes. Incluir health check.
 - **Criterios de aceptación:**
-  - [ ] Express arranca en `PORT` de env
-  - [ ] `cors()` configurado con `CORS_ORIGIN` de env
-  - [ ] `helmet()` activo
-  - [ ] `express.json({ limit: '10kb' })` activo
-  - [ ] `rateLimit()` global: 100 req/15min
-  - [ ] Middleware `apiKeyGate` valida header `x-api-key`
-  - [ ] `GET /api/health` retorna `{ status: "ok", database, uptime, version }`
-  - [ ] Health check verifica conexión a DB (Prisma)
+  - [x] Express arranca en `PORT` de env
+  - [x] `cors()` configurado con `CORS_ORIGIN` de env
+  - [x] `helmet()` activo
+  - [x] `express.json({ limit: '10kb' })` activo
+  - [x] `rateLimit()` global: 100 req/15min
+  - [x] Middleware `apiKeyGate` valida header `x-api-key`
+  - [x] `GET /api/health` retorna `{ status: "ok", database, uptime, version }`
+  - [x] Health check verifica conexión a DB (Prisma)
 - **Dependencias:** Task 0.1
-- **Archivos:** `app/server/src/index.ts`, `app/server/src/middleware/apiKeyGate.ts`, `app/server/src/middleware/rateLimiter.ts`, `app/server/src/routes/health.ts`
+- **Archivos:** `app/server/src/index.ts`, `app/server/src/middleware/apiKeyGate.ts`, `app/server/src/middleware/rateLimiter.ts`, `app/server/src/lib/prisma.ts`
 
 ---
 
