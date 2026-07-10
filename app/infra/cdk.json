@@ -85,7 +85,8 @@
         "maxAllocatedStorage": 100,
         "backupRetentionDays": 7,
         "deletionProtection": false,
-        "removalPolicy": "DESTROY"
+        "removalPolicy": "DESTROY",
+        "allowedCidrs": ["0.0.0.0/0"]  // ⚠️ For development only - restrict in production
       },
       "cert": {
         "vpcId": "",
@@ -94,7 +95,8 @@
         "maxAllocatedStorage": 100,
         "backupRetentionDays": 7,
         "deletionProtection": true,
-        "removalPolicy": "DESTROY"
+        "removalPolicy": "DESTROY",
+        "allowedCidrs": ["10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16"]  // Private networks only
       },
       "prod": {
         "vpcId": "vpc-0123456789abcdef0",
@@ -103,7 +105,8 @@
         "maxAllocatedStorage": 200,
         "backupRetentionDays": 30,
         "deletionProtection": true,
-        "removalPolicy": "RETAIN"
+        "removalPolicy": "RETAIN",
+        "allowedCidrs": ["10.0.0.0/8"]  // VPC CIDR only - update with actual VPC CIDR
       }
     }
   }

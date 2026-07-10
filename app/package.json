@@ -11,7 +11,16 @@
     "start": "npm run start --prefix server",
     "db:migrate": "npm run db:migrate --prefix server",
     "db:seed": "npm run db:seed --prefix server",
-    "db:reset": "npm run db:reset --prefix server"
+    "db:reset": "npm run db:reset --prefix server",
+    "infra:deploy": "cd infra && npx cdk deploy -c env=dev",
+    "infra:deploy:cert": "cd infra && npx cdk deploy -c env=cert",
+    "infra:deploy:prod": "cd infra && npx cdk deploy -c env=prod",
+    "infra:destroy": "cd infra && npx cdk destroy -c env=dev",
+    "infra:destroy:cert": "cd infra && npx cdk destroy -c env=cert",
+    "infra:destroy:prod": "cd infra && npx cdk destroy -c env=prod",
+    "infra:synth": "cd infra && npx cdk synth -c env=dev",
+    "infra:diff": "cd infra && npx cdk diff -c env=dev",
+    "infra:bootstrap": "cd infra && npx cdk bootstrap"
   },
   "dependencies": {},
   "devDependencies": {

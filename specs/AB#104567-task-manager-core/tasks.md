@@ -82,13 +82,13 @@ graph TD
 ### Task 0.3: IaC + AWS RDS provisioning (~3h)
 - **Descripción:** Provisionar base de datos PostgreSQL en AWS RDS para entorno remoto (dev/cert/prod). Configurar via CDK o Terraform según preferencia. Incluir security groups, parameter groups y connection string.
 - **Criterios de aceptación:**
-  - [ ] Infraestructura como código para RDS PostgreSQL 16
-  - [ ] Security group permite conexión solo desde Vercel/VPC
-  - [ ] Parameter group con configuración optimizada
-  - [ ] Outputs: endpoint, port, connection string
-  - [ ] Documentación de deploy en `docs/architecture/system-design.md`
-  - [ ] `.env.production.example` con `DATABASE_URL` de RDS
-  - [ ] Script o instrucciones para provisionar/destruir
+  - [x] Infraestructura como código para RDS PostgreSQL 16
+  - [x] Security group permite conexión solo desde Vercel/VPC
+  - [x] Parameter group con configuración optimizada
+  - [x] Outputs: endpoint, port, connection string
+  - [x] Documentación de deploy en `docs/architecture/system-design.md`
+  - [x] `.env.production.example` con `DATABASE_URL` de RDS
+  - [x] Script o instrucciones para provisionar/destruir
 - **Dependencias:** Task 0.2
 - **Archivos:** `app/infra/`, `docs/architecture/system-design.md`, `app/.env.production.example`
 
@@ -230,7 +230,7 @@ graph TD
 | ~~11~~ | ~~4.2~~ | ~~Tests E2E~~ | ~~QA~~ | ~~deferred~~ |
 | 10 | 4.3 | Limpieza + documentación | ~1h | Todas |
 
-## Total estimate: ~24h (includes 20% buffer)
+## Total Estimate: ~h (includes 20% buffer)
 
 **Estimado base:** 20h · **Buffer (20%):** 4h · **Total:** 24h (developer) · QA tasks deferred
 

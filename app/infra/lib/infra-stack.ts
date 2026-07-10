@@ -11,6 +11,7 @@ interface EnvironmentConfig {
   backupRetentionDays: number;
   deletionProtection: boolean;
   removalPolicy: 'DESTROY' | 'RETAIN';
+  allowedCidrs: string[];  // CIDR ranges allowed to connect to RDS
 }
 
 export class InfraStack extends cdk.Stack {
@@ -62,13 +63,14 @@ export class InfraStack extends cdk.Stack {
       allowAllOutbound: true,
     });
 
-    // In production/cert, restrict this to specific office/Vercel/VPC IP ranges.
-    // For local dev sandbox, it allows any public connection if DB resides in public/isolated subnet.
-    rdsSecurityGroup.addIngressRule(
-      ec2.Peer.anyIpv4(),
-      ec2.Port.tcp(5432),
-      `Allow access to PostgreSQL database on port 5432 for ${targetEnv}`
-    );
+    // Add ingress rules for each allowed CIDR
+    config.allowedCidrs.forEach((cidr, index) => {
+      rdsSecurityGroup.addIngressRule(
+        ec2.Peer.ipv4(cidr),
+        ec2.Port.tcp(5432),
+        `Allow PostgreSQL access from CIDR ${index + 1} for ${targetEnv}`
+      );
+    });
 
     // 4. Custom Parameter Group for PostgreSQL 16
     const parameterGroup = new rds.ParameterGroup(this, 'PostgresParameterGroup', {
